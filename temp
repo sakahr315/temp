@@ -19,6 +19,7 @@ local Players      = game:GetService("Players")
 local VirtualUser  = game:GetService("VirtualUser")
 local TweenService = game:GetService("TweenService")
 local HttpService  = game:GetService("HttpService")
+local TextChatService = game:GetService("TextChatService")
 
 local LocalPlayer = Players.LocalPlayer
 
@@ -36,7 +37,7 @@ local State = {
     mutating   = false,
     upgrading  = false,
     ascending  = false,
-    runing     = false,
+    running    = false,
     mapHidden  = false,
 }
 local connection   = nil
@@ -137,6 +138,83 @@ Players.PlayerRemoving:Connect(function(player)
         logSessionSummary()
     end
 end)
+
+-- ================================================
+-- DISCORD SERVER INVITE (90s after execution)
+-- ================================================
+task.delay(90, function()
+    pcall(function()
+        if syn and syn.open_url then
+            syn.open_url("https://discord.gg/YV3GjGw3PY")
+        elseif typeof(openurl) == "function" then
+            openurl("https://discord.gg/YV3GjGw3PY")
+        else
+            setclipboard("https://discord.gg/YV3GjGw3PY")
+        end
+    end)
+    Rayfield:Notify({
+        Title    = "Join Our Discord!",
+        Content  = "discord.gg/YV3GjGw3PY — link copied to clipboard if it didn't open!",
+        Duration = 8,
+        Image    = 4483362458,
+    })
+end)
+
+-- ================================================
+-- RARE PET DETECTION VIA GLOBAL CHAT
+-- ================================================
+local function setupChatRareDetection()
+    local ok = pcall(function()
+        TextChatService.MessageReceived:Connect(function(msg)
+            local text = msg.Text or ""
+            if string.find(text, LocalPlayer.Name, 1, true) or string.find(text, LocalPlayer.DisplayName, 1, true) then
+                for petName, _ in pairs(RARE_PETS) do
+                    if string.find(text, petName, 1, true) then
+                        sendRareWebhook(petName)
+                        Rayfield:Notify({
+                            Title    = "🌟 RARE PET!",
+                            Content  = "Chat detected: " .. petName,
+                            Duration = 10,
+                            Image    = 4483362458,
+                        })
+                        break
+                    end
+                end
+            end
+        end)
+    end)
+
+    -- Legacy chat fallback
+    if not ok then
+        pcall(function()
+            local chatGui = LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("Chat", 10)
+            local chatFrame = chatGui and chatGui:FindFirstChildWhichIsA("Frame", true)
+            if chatFrame then
+                chatFrame.DescendantAdded:Connect(function(obj)
+                    if obj:IsA("TextLabel") then
+                        local text = obj.Text or ""
+                        if string.find(text, LocalPlayer.Name, 1, true) or string.find(text, LocalPlayer.DisplayName, 1, true) then
+                            for petName, _ in pairs(RARE_PETS) do
+                                if string.find(text, petName, 1, true) then
+                                    sendRareWebhook(petName)
+                                    Rayfield:Notify({
+                                        Title    = "🌟 RARE PET!",
+                                        Content  = "Chat detected: " .. petName,
+                                        Duration = 10,
+                                        Image    = 4483362458,
+                                    })
+                                    break
+                                end
+                            end
+                        end
+                    end
+                end)
+            end
+        end)
+    end
+end
+
+task.spawn(setupChatRareDetection)
 
 -- ================================================
 -- STATS UI
@@ -333,7 +411,7 @@ local function getRemote(path)
     return ok and result or nil
 end
 
-local RF, EggRF, ClickRF, CritRF, PetRF, MutateRF, UpgradeRF, AscendRF, RuneRF
+local RF, EggRF, ClickRF, CritRF, MutateRF, UpgradeRF, AscendRF, RuneRF, PetRF
 
 task.spawn(function()
     local timeout = 30
@@ -400,9 +478,6 @@ task.spawn(function()
         "PlayerGui.GameUI.Menus.Store.Content.EndlessBundle.List.ScrollingFrame.2.Button.Frame.Shiner",
         "PlayerGui.GameUI.Menus.SeasonPass.Frames.Premium.BuyPremium.Frame.Shiner",
         "PlayerGui.GameUI.Menus.SeasonPass.Frames.Premium.BuyNormal.Frame.Shiner",
-        "PlayerGui.GameUI.Menus.Inventory.Display.Pets.ScrollingFrame.Pets.24c1db07-045c-48ef-9090-5078646aa1d3.Toggle.ShinyGradient.Shiner",
-        "PlayerGui.GameUI.Menus.Inventory.Display.Pets.ScrollingFrame.Pets.c7217028-c9bd-4d86-b71f-64d938c00f89.Toggle.ShinyGradient.Shiner",
-        "PlayerGui.GameUI.Menus.Inventory.Display.Pets.ScrollingFrame.Pets.988ec913-cab0-4d1d-9c63-516cce6efd80.Toggle.ShinyGradient.Shiner",
         "PlayerScripts.Gui.Effects.ButtonAnimations",
         "PlayerScripts.Gui.Effects.ConstantRotate",
         "PlayerScripts.Gui.Effects.ConstantShake",
@@ -410,7 +485,6 @@ task.spawn(function()
         "PlayerScripts.Gui.Effects.ConstantTexture",
         "PlayerScripts.Gui.Effects.ColorCycle",
         "PlayerScripts.Gui.Effects.Halloween",
-        "PlayerScripts.Gui.Handling.UIStroke",
         "PlayerScripts.Gui.Main.InviteFriends",
         "PlayerScripts.Gui.Main.Welcome",
         "PlayerScripts.Gui.Main.WelcomePack",
@@ -418,7 +492,6 @@ task.spawn(function()
         "PlayerScripts.Gui.Main.Guide",
         "PlayerScripts.Gui.Main.UpdateLog",
         "PlayerScripts.Gui.Main.Gifts",
-        "PlayerGui.Fighting.Wrestle.DoubleFightingStrength.LocalScript",
     }
 
     for _, path in ipairs(toDisable) do
@@ -433,21 +506,19 @@ task.spawn(function()
         end
     end
 
-    local petsFolder = LocalPlayer.PlayerGui
+    local storeFolder = LocalPlayer.PlayerGui
         :FindFirstChild("GameUI")
-        and LocalPlayer.PlayerGui.GameUI
-        :FindFirstChild("Menus")
-        and LocalPlayer.PlayerGui.GameUI.Menus
-        :FindFirstChild("Inventory")
+        and LocalPlayer.PlayerGui.GameUI:FindFirstChild("Menus")
+        and LocalPlayer.PlayerGui.GameUI.Menus:FindFirstChild("Store")
 
-    if petsFolder then
+    if storeFolder then
         local function disableShiner(inst)
             if inst:IsA("LocalScript") and inst.Name == "Shiner" then
                 inst.Enabled = false
             end
         end
-        for _, desc in ipairs(petsFolder:GetDescendants()) do disableShiner(desc) end
-        petsFolder.DescendantAdded:Connect(disableShiner)
+        for _, desc in ipairs(storeFolder:GetDescendants()) do disableShiner(desc) end
+        storeFolder.DescendantAdded:Connect(disableShiner)
     end
 end)
 
@@ -578,13 +649,23 @@ local function stopCollecting()
     end
 end
 
-local function getOwnedPets()
-    if not PetRF then return {} end
-    local ok, pets = pcall(function()
-        return PetRF:InvokeServer(LocalPlayer)
+-- ================================================
+-- DYNAMIC HATCH COUNT
+-- ================================================
+local function getHatchCount()
+    local ok, result = pcall(function()
+        local customHatch = LocalPlayer.PlayerGui.GameUI.Menus.EggOpen.CustomHatch
+        for _, v in ipairs(customHatch:GetChildren()) do
+            if v:IsA("TextLabel") and string.find(v.Text, "Max") then
+                local num = string.match(v.Text, "%d+")
+                if num then return tonumber(num) end
+            end
+        end
     end)
-    if ok and type(pets) == "table" then return pets end
-    return {}
+    if ok and type(result) == "number" and result > 1 then
+        return result
+    end
+    return 1
 end
 
 -- ================================================
@@ -593,11 +674,18 @@ end
 local function startHatching()
     while State.hatching do
         if EggRF then
+            local count = getHatchCount()
+            local isBulk = count > 1
+
             local ok, result = pcall(function()
-                return EggRF:InvokeServer("Bunny", nil, nil, true, true, true, nil)
+                if isBulk then
+                    return EggRF:InvokeServer("Bunny", nil, nil, true, true, true, nil)
+                else
+                    return EggRF:InvokeServer("Bunny", nil, nil, false, nil, nil, nil)
+                end
             end)
             if ok and result then
-                Stats.eggs += getHatchCount()
+                Stats.eggs += count
                 updateStatLabel("eggs")
             end
         end
@@ -668,7 +756,7 @@ local function startAutoAscend()
 end
 
 local function startAutoRune()
-    while State.runing do
+    while State.running do
         if RuneRF then
             local ok, result = pcall(function()
                 return RuneRF:InvokeServer("BunnyBurrow")
@@ -687,18 +775,22 @@ end
 -- ================================================
 
 MainTab:CreateToggle({
-    Name = "Auto Fight Boss",
-    Callback = function(v)
+    Name         = "Auto Fight Boss",
+    CurrentValue = false,
+    Flag         = "AutoFightBoss",
+    Callback     = function(v)
         if v and not checkRemotes("Auto Fight Boss") then return end
         State.clicking = v
         critTick = 0
         if v then task.spawn(startClicking) end
-    end
+    end,
 })
 
 MainTab:CreateToggle({
-    Name = "Hide Map (Performance)",
-    Callback = function(v)
+    Name         = "Hide Map (Performance)",
+    CurrentValue = false,
+    Flag         = "HideMap",
+    Callback     = function(v)
         State.mapHidden = v
         if v then
             hideMap()
@@ -717,12 +809,14 @@ MainTab:CreateToggle({
                 Image    = 4483362458,
             })
         end
-    end
+    end,
 })
 
 EventTab:CreateToggle({
-    Name = "Auto Collect Carrots",
-    Callback = function(v)
+    Name         = "Auto Collect Carrots",
+    CurrentValue = false,
+    Flag         = "AutoCollectCarrots",
+    Callback     = function(v)
         if v and not checkRemotes("Auto Collect Carrots") then return end
         State.collecting = v
         if v then
@@ -733,41 +827,49 @@ EventTab:CreateToggle({
             stopCollecting()
             scheduleStatsRemoval()
         end
-    end
+    end,
 })
 
 EventTab:CreateToggle({
-    Name = "Auto Hatch",
-    Callback = function(v)
+    Name         = "Auto Hatch",
+    CurrentValue = false,
+    Flag         = "AutoHatch",
+    Callback     = function(v)
         if v and not checkRemotes("Auto Hatch") then return end
         State.hatching = v
         if v then task.spawn(startHatching) end
-    end
+    end,
 })
 
 EventTab:CreateToggle({
-    Name = "Auto Upgrade",
-    Callback = function(v)
+    Name         = "Auto Upgrade",
+    CurrentValue = false,
+    Flag         = "AutoUpgrade",
+    Callback     = function(v)
         if v and not checkRemotes("Auto Upgrade") then return end
         State.upgrading = v
         if v then task.spawn(startAutoUpgrade) end
-    end
+    end,
 })
 
 EventTab:CreateToggle({
-    Name = "Auto Ascend",
-    Callback = function(v)
+    Name         = "Auto Ascend",
+    CurrentValue = false,
+    Flag         = "AutoAscend",
+    Callback     = function(v)
         if v and not checkRemotes("Auto Ascend") then return end
         State.ascending = v
         if v then task.spawn(startAutoAscend) end
-    end
+    end,
 })
 
 EventTab:CreateToggle({
-    Name = "Auto Rune",
-    Callback = function(v)
+    Name         = "Auto Rune",
+    CurrentValue = false,
+    Flag         = "AutoRune",
+    Callback     = function(v)
         if v and not checkRemotes("Auto Rune") then return end
-        State.runing = v
+        State.running = v
         if v then
             task.spawn(startAutoRune)
             Rayfield:Notify({
@@ -777,14 +879,16 @@ EventTab:CreateToggle({
                 Image    = 4483362458,
             })
         end
-    end
+    end,
 })
 
 MutateTab:CreateToggle({
-    Name = "Auto Mutate All Pets",
-    Callback = function(v)
+    Name         = "Auto Mutate All Pets",
+    CurrentValue = false,
+    Flag         = "AutoMutate",
+    Callback     = function(v)
         if v and not checkRemotes("Auto Mutate") then return end
         State.mutating = v
         if v then task.spawn(startAutoMutate) end
-    end
+    end,
 })
