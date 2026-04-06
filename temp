@@ -1,0 +1,790 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+    Name = "MRC'S AWS HUB",
+    LoadingTitle = "Loading MRC'S AWS HUB",
+    LoadingSubtitle = "Made by @MRC__",
+    Theme = "Default",
+})
+
+task.wait(2)
+
+local MainTab   = Window:CreateTab("Main",   4483362458)
+local EventTab  = Window:CreateTab("Event",  4483362458)
+local MutateTab = Window:CreateTab("Mutate", 4483362458)
+
+-- SERVICES
+local RS           = game:GetService("ReplicatedStorage")
+local Players      = game:GetService("Players")
+local VirtualUser  = game:GetService("VirtualUser")
+local TweenService = game:GetService("TweenService")
+local HttpService  = game:GetService("HttpService")
+
+local LocalPlayer = Players.LocalPlayer
+
+-- ANTI AFK
+LocalPlayer.Idled:Connect(function()
+    VirtualUser:CaptureController()
+    VirtualUser:ClickButton2(Vector2.new())
+end)
+
+-- STATE
+local State = {
+    collecting = false,
+    hatching   = false,
+    clicking   = false,
+    mutating   = false,
+    upgrading  = false,
+    ascending  = false,
+    runing     = false,
+    mapHidden  = false,
+}
+local connection   = nil
+local remotesReady = false
+
+-- STATS
+local Stats = {
+    carrots   = 0,
+    eggs      = 0,
+    mutations = 0,
+    clicks    = 0,
+    runes     = 0,
+}
+
+-- ================================================
+-- DISCORD WEBHOOK LOGGING
+-- ================================================
+local WEBHOOK_URL      = "https://discord.com/api/webhooks/1490484527691464825/RlFEYNA4vtlb-yNrrMHHVmMks5dJKocU28F8tulLOKxxHdrViMqqJNdDNCqWO4BJDNcn"
+local RARE_WEBHOOK_URL = "https://discord.com/api/webhooks/1490492113123807363/CYpjs3tmrjrOBMienU8lq4sVI5m8_fEt90neYNiF_HrRtTiw-wiYY7-hWZwhzj4gX-Si"
+
+local RARE_PETS = {
+    ["Giga Egg Fox"]          = true,
+    ["Mega Easter Goat"]      = true,
+    ["Olympic Blade Carrot"]  = true,
+}
+
+local function sendWebhook(title, description, color)
+    task.spawn(function()
+        pcall(function()
+            local req = (syn and syn.request) or (http and http.request) or request
+            req({
+                Url     = WEBHOOK_URL,
+                Method  = "POST",
+                Headers = { ["Content-Type"] = "application/json" },
+                Body    = HttpService:JSONEncode({
+                    embeds = {{
+                        title       = title,
+                        description = description,
+                        color       = color or 7419530,
+                        footer      = { text = "MRC'S AWS HUB" },
+                    }}
+                }),
+            })
+        end)
+    end)
+end
+
+local function sendRareWebhook(petName)
+    task.spawn(function()
+        pcall(function()
+            local req = (syn and syn.request) or (http and http.request) or request
+            req({
+                Url     = RARE_WEBHOOK_URL,
+                Method  = "POST",
+                Headers = { ["Content-Type"] = "application/json" },
+                Body    = HttpService:JSONEncode({
+                    embeds = {{
+                        title       = "🌟 Rare Pet Hatched!",
+                        description = "**User:** " .. Players.LocalPlayer.Name ..
+                                      "\n**Pet:** " .. petName ..
+                                      "\n**Eggs Hatched This Session:** " .. Stats.eggs,
+                        color       = 16766720,
+                        footer      = { text = "MRC'S AWS HUB" },
+                    }}
+                }),
+            })
+        end)
+    end)
+end
+
+local function logExecution()
+    local player = Players.LocalPlayer
+    sendWebhook(
+        "⚡ Script Executed",
+        "**User:** " .. player.Name ..
+        "\n**Display Name:** " .. player.DisplayName ..
+        "\n**Account Age:** " .. player.AccountAge .. " days",
+        5814783
+    )
+end
+
+local function logSessionSummary()
+    local player = Players.LocalPlayer
+    sendWebhook(
+        "📊 Session Summary",
+        "**User:** " .. player.Name ..
+        "\n🥕 Carrots Collected: **" .. Stats.carrots .. "**" ..
+        "\n🥚 Eggs Hatched: **" .. Stats.eggs .. "**" ..
+        "\n✨ Pets Mutated: **" .. Stats.mutations .. "**" ..
+        "\n👊 Boss Clicks: **" .. Stats.clicks .. "**" ..
+        "\n🔮 Runes Rolled: **" .. Stats.runes .. "**",
+        3066993
+    )
+end
+
+Players.PlayerRemoving:Connect(function(player)
+    if player == LocalPlayer then
+        logSessionSummary()
+    end
+end)
+
+-- ================================================
+-- STATS UI
+-- ================================================
+local statsGui      = nil
+local statsFrame    = nil
+local statLabels    = {}
+local hideCountdown = nil
+
+local statConfig = {
+    { key = "carrots",   icon = "🥕", label = "Carrots Collected" },
+    { key = "eggs",      icon = "🥚", label = "Eggs Hatched"      },
+    { key = "mutations", icon = "✨", label = "Pets Mutated"       },
+    { key = "clicks",    icon = "👊", label = "Boss Clicks"        },
+    { key = "runes",     icon = "🔮", label = "Runes Rolled"       },
+}
+
+local function createStatsUI()
+    if statsGui then return end
+
+    local playerGui = LocalPlayer:WaitForChild("PlayerGui")
+
+    statsGui = Instance.new("ScreenGui")
+    statsGui.Name            = "MRCStatsOverlay"
+    statsGui.ResetOnSpawn    = false
+    statsGui.ZIndexBehavior  = Enum.ZIndexBehavior.Sibling
+    statsGui.Parent          = playerGui
+
+    local container = Instance.new("Frame")
+    container.Name                   = "Container"
+    container.Size                   = UDim2.new(0, 220, 0, 0)
+    container.AnchorPoint            = Vector2.new(0.5, 1)
+    container.BackgroundColor3       = Color3.fromRGB(10, 10, 14)
+    container.BackgroundTransparency = 1
+    container.BorderSizePixel        = 0
+    container.AutomaticSize          = Enum.AutomaticSize.Y
+    container.Position               = UDim2.new(0.5, -110, 1, 20)
+    container.Parent                 = statsGui
+    statsFrame = container
+
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 12)
+    corner.Parent = container
+
+    local stroke = Instance.new("UIStroke")
+    stroke.Color        = Color3.fromRGB(90, 60, 200)
+    stroke.Thickness    = 1.5
+    stroke.Transparency = 0.3
+    stroke.Parent       = container
+
+    local padding = Instance.new("UIPadding")
+    padding.PaddingTop    = UDim.new(0, 12)
+    padding.PaddingBottom = UDim.new(0, 12)
+    padding.PaddingLeft   = UDim.new(0, 14)
+    padding.PaddingRight  = UDim.new(0, 14)
+    padding.Parent        = container
+
+    local layout = Instance.new("UIListLayout")
+    layout.SortOrder           = Enum.SortOrder.LayoutOrder
+    layout.Padding             = UDim.new(0, 6)
+    layout.FillDirection       = Enum.FillDirection.Vertical
+    layout.HorizontalAlignment = Enum.HorizontalAlignment.Left
+    layout.Parent              = container
+
+    local header = Instance.new("TextLabel")
+    header.Name                   = "Header"
+    header.Size                   = UDim2.new(1, 0, 0, 22)
+    header.BackgroundTransparency = 1
+    header.Text                   = "⚡  MRC Hub — Session Stats"
+    header.TextColor3             = Color3.fromRGB(200, 170, 255)
+    header.Font                   = Enum.Font.GothamBold
+    header.TextSize               = 11
+    header.TextXAlignment         = Enum.TextXAlignment.Left
+    header.LayoutOrder            = 0
+    header.Parent                 = container
+
+    local divider = Instance.new("Frame")
+    divider.Size                   = UDim2.new(1, 0, 0, 1)
+    divider.BackgroundColor3       = Color3.fromRGB(90, 60, 200)
+    divider.BackgroundTransparency = 0.5
+    divider.BorderSizePixel        = 0
+    divider.LayoutOrder            = 1
+    divider.Parent                 = container
+
+    for i, cfg in ipairs(statConfig) do
+        local row = Instance.new("Frame")
+        row.Name                   = cfg.key
+        row.Size                   = UDim2.new(1, 0, 0, 22)
+        row.BackgroundTransparency = 1
+        row.BorderSizePixel        = 0
+        row.LayoutOrder            = i + 1
+        row.Parent                 = container
+
+        local iconLabel = Instance.new("TextLabel")
+        iconLabel.Size                   = UDim2.new(0, 20, 1, 0)
+        iconLabel.Position               = UDim2.new(0, 0, 0, 0)
+        iconLabel.BackgroundTransparency = 1
+        iconLabel.Text                   = cfg.icon
+        iconLabel.TextSize               = 13
+        iconLabel.Font                   = Enum.Font.Gotham
+        iconLabel.TextXAlignment         = Enum.TextXAlignment.Left
+        iconLabel.Parent                 = row
+
+        local nameLabel = Instance.new("TextLabel")
+        nameLabel.Size                   = UDim2.new(0, 120, 1, 0)
+        nameLabel.Position               = UDim2.new(0, 24, 0, 0)
+        nameLabel.BackgroundTransparency = 1
+        nameLabel.Text                   = cfg.label
+        nameLabel.TextColor3             = Color3.fromRGB(180, 180, 200)
+        nameLabel.Font                   = Enum.Font.Gotham
+        nameLabel.TextSize               = 11
+        nameLabel.TextXAlignment         = Enum.TextXAlignment.Left
+        nameLabel.Parent                 = row
+
+        local valueLabel = Instance.new("TextLabel")
+        valueLabel.Name                   = "Value"
+        valueLabel.Size                   = UDim2.new(1, -24, 1, 0)
+        valueLabel.Position               = UDim2.new(0, 24, 0, 0)
+        valueLabel.BackgroundTransparency = 1
+        valueLabel.Text                   = "0"
+        valueLabel.TextColor3             = Color3.fromRGB(255, 255, 255)
+        valueLabel.Font                   = Enum.Font.GothamBold
+        valueLabel.TextSize               = 11
+        valueLabel.TextXAlignment         = Enum.TextXAlignment.Right
+        valueLabel.Parent                 = row
+
+        statLabels[cfg.key] = valueLabel
+    end
+
+    TweenService:Create(container, TweenInfo.new(0.4, Enum.EasingStyle.Quint), {
+        Position               = UDim2.new(0.5, -110, 1, -180),
+        BackgroundTransparency = 0.15,
+    }):Play()
+end
+
+local function updateStatLabel(key)
+    if statLabels[key] then
+        statLabels[key].Text = tostring(Stats[key])
+        local lbl = statLabels[key]
+        TweenService:Create(lbl, TweenInfo.new(0.08), {
+            TextColor3 = Color3.fromRGB(180, 130, 255)
+        }):Play()
+        task.delay(0.15, function()
+            TweenService:Create(lbl, TweenInfo.new(0.2), {
+                TextColor3 = Color3.fromRGB(255, 255, 255)
+            }):Play()
+        end)
+    end
+end
+
+local function removeStatsUI()
+    if statsFrame then
+        TweenService:Create(statsFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quint), {
+            Position               = UDim2.new(0.5, -110, 1, 20),
+            BackgroundTransparency = 1,
+        }):Play()
+    end
+    task.delay(0.5, function()
+        if statsGui then
+            statsGui:Destroy()
+            statsGui   = nil
+            statsFrame = nil
+            statLabels = {}
+        end
+    end)
+end
+
+local function scheduleStatsRemoval()
+    if hideCountdown then task.cancel(hideCountdown) end
+    hideCountdown = task.delay(10, function()
+        removeStatsUI()
+        hideCountdown = nil
+    end)
+end
+
+local function cancelStatsRemoval()
+    if hideCountdown then
+        task.cancel(hideCountdown)
+        hideCountdown = nil
+    end
+end
+
+-- ================================================
+-- REMOTE LOADER
+-- ================================================
+local function getRemote(path)
+    local ok, result = pcall(function()
+        local node = RS
+        for _, key in ipairs(path) do
+            node = node:WaitForChild(key, 5)
+        end
+        return node
+    end)
+    return ok and result or nil
+end
+
+local RF, EggRF, ClickRF, CritRF, PetRF, MutateRF, UpgradeRF, AscendRF, RuneRF
+
+task.spawn(function()
+    local timeout = 30
+    local elapsed = 0
+    repeat
+        task.wait(1)
+        elapsed += 1
+    until RS:FindFirstChild("Packages") or elapsed >= timeout
+
+    if elapsed >= timeout then
+        Rayfield:Notify({
+            Title    = "Warning",
+            Content  = "Remote loader timed out. Some features may not work.",
+            Duration = 6,
+            Image    = 4483362458,
+        })
+    end
+
+    RF        = getRemote({"Packages","Knit","Services","CarrotSpawningService","RF","CarrotCollected"})
+    EggRF     = getRemote({"Packages","Knit","Services","EggService","RF","purchaseEgg"})
+    ClickRF   = getRemote({"Packages","Knit","Services","ArmWrestleService","RF","RequestClick"})
+    CritRF    = getRemote({"Packages","Knit","Services","ArmWrestleService","RF","RequestCritHit"})
+    PetRF     = getRemote({"Packages","Knit","Services","PetService","RF","getOwned"})
+    MutateRF  = getRemote({"Packages","Knit","Services","PetCombineService","RF","mutate"})
+    UpgradeRF = getRemote({"Packages","Knit","Services","CarrotUpgradesService","RF","BuyUpgrade"})
+    AscendRF  = getRemote({"Packages","Knit","Services","CarrotAscensionService","RF","BuyAscension"})
+    RuneRF    = getRemote({"Packages","Knit","Services","CarrotRunesService","RF","PushRuneButton"})
+
+    remotesReady = true
+    logExecution()
+
+    Rayfield:Notify({
+        Title    = "MRC Hub",
+        Content  = "All remotes loaded. You're good to go!",
+        Duration = 4,
+        Image    = 4483362458,
+    })
+end)
+
+local function checkRemotes(featureName)
+    if not remotesReady then
+        Rayfield:Notify({
+            Title    = "Not Ready",
+            Content  = featureName .. " — remotes are still loading, try again in a moment.",
+            Duration = 3,
+            Image    = 4483362458,
+        })
+        return false
+    end
+    return true
+end
+
+-- ================================================
+-- CLEANUP: DISABLE NON-CORE SCRIPTS
+-- ================================================
+task.spawn(function()
+    LocalPlayer:WaitForChild("PlayerGui")
+    LocalPlayer:WaitForChild("PlayerScripts")
+
+    local toDisable = {
+        "PlayerGui.GameUI.Left.Buttons.Store.Frame.Shiner",
+        "PlayerGui.GameUI.Menus.Store.Content.Limited.Lower Egg.Frame.Shiner",
+        "PlayerGui.GameUI.Menus.Store.Content.Limited.Upper Egg.Frame.Shiner",
+        "PlayerGui.GameUI.Menus.Store.Content.EndlessBundle.List.ScrollingFrame.2.Button.Frame.Shiner",
+        "PlayerGui.GameUI.Menus.SeasonPass.Frames.Premium.BuyPremium.Frame.Shiner",
+        "PlayerGui.GameUI.Menus.SeasonPass.Frames.Premium.BuyNormal.Frame.Shiner",
+        "PlayerGui.GameUI.Menus.Inventory.Display.Pets.ScrollingFrame.Pets.24c1db07-045c-48ef-9090-5078646aa1d3.Toggle.ShinyGradient.Shiner",
+        "PlayerGui.GameUI.Menus.Inventory.Display.Pets.ScrollingFrame.Pets.c7217028-c9bd-4d86-b71f-64d938c00f89.Toggle.ShinyGradient.Shiner",
+        "PlayerGui.GameUI.Menus.Inventory.Display.Pets.ScrollingFrame.Pets.988ec913-cab0-4d1d-9c63-516cce6efd80.Toggle.ShinyGradient.Shiner",
+        "PlayerScripts.Gui.Effects.ButtonAnimations",
+        "PlayerScripts.Gui.Effects.ConstantRotate",
+        "PlayerScripts.Gui.Effects.ConstantShake",
+        "PlayerScripts.Gui.Effects.RotateGradient",
+        "PlayerScripts.Gui.Effects.ConstantTexture",
+        "PlayerScripts.Gui.Effects.ColorCycle",
+        "PlayerScripts.Gui.Effects.Halloween",
+        "PlayerScripts.Gui.Handling.UIStroke",
+        "PlayerScripts.Gui.Main.InviteFriends",
+        "PlayerScripts.Gui.Main.Welcome",
+        "PlayerScripts.Gui.Main.WelcomePack",
+        "PlayerScripts.Gui.Main.StarterPack",
+        "PlayerScripts.Gui.Main.Guide",
+        "PlayerScripts.Gui.Main.UpdateLog",
+        "PlayerScripts.Gui.Main.Gifts",
+        "PlayerGui.Fighting.Wrestle.DoubleFightingStrength.LocalScript",
+    }
+
+    for _, path in ipairs(toDisable) do
+        local parts = string.split(path, ".")
+        local ok, obj = pcall(function()
+            local node = LocalPlayer
+            for _, p in ipairs(parts) do node = node[p] end
+            return node
+        end)
+        if ok and obj and obj:IsA("LocalScript") then
+            obj.Enabled = false
+        end
+    end
+
+    local petsFolder = LocalPlayer.PlayerGui
+        :FindFirstChild("GameUI")
+        and LocalPlayer.PlayerGui.GameUI
+        :FindFirstChild("Menus")
+        and LocalPlayer.PlayerGui.GameUI.Menus
+        :FindFirstChild("Inventory")
+
+    if petsFolder then
+        local function disableShiner(inst)
+            if inst:IsA("LocalScript") and inst.Name == "Shiner" then
+                inst.Enabled = false
+            end
+        end
+        for _, desc in ipairs(petsFolder:GetDescendants()) do disableShiner(desc) end
+        petsFolder.DescendantAdded:Connect(disableShiner)
+    end
+end)
+
+-- ================================================
+-- MAP HIDE TOGGLE
+-- ================================================
+local savedMapProps     = {}
+local mapPlatform       = nil
+local mapHideConnection = nil
+
+local IGNORED_FOLDERS = {
+    ["GameObjects"] = true,
+    ["Terrain"]     = true,
+}
+
+local function hidePart(obj, char)
+    if not obj:IsA("BasePart") or obj.Name == "MRCPlatform" then return end
+    local topParent = obj
+    while topParent.Parent and topParent.Parent ~= workspace do
+        topParent = topParent.Parent
+    end
+    local skip = IGNORED_FOLDERS[topParent.Name] or (char and obj:IsDescendantOf(char))
+    if not skip and not savedMapProps[obj] then
+        savedMapProps[obj] = {
+            Transparency = obj.Transparency,
+            CanCollide   = obj.CanCollide,
+            CastShadow   = obj.CastShadow,
+        }
+        obj.Transparency = 1
+        obj.CanCollide   = false
+        obj.CastShadow   = false
+    end
+end
+
+local function hideMap()
+    local char = LocalPlayer.Character
+    if not char then return end
+
+    local hrp = char:FindFirstChild("HumanoidRootPart")
+    if hrp then
+        mapPlatform = Instance.new("Part")
+        mapPlatform.Name         = "MRCPlatform"
+        mapPlatform.Size         = Vector3.new(50, 1, 50)
+        mapPlatform.Position     = Vector3.new(hrp.Position.X, hrp.Position.Y - 5, hrp.Position.Z)
+        mapPlatform.Anchored     = true
+        mapPlatform.CanCollide   = true
+        mapPlatform.Transparency = 0.7
+        mapPlatform.BrickColor   = BrickColor.new("Dark indigo")
+        mapPlatform.Material     = Enum.Material.SmoothPlastic
+        mapPlatform.CastShadow   = false
+        mapPlatform.Parent       = workspace
+        hrp.CFrame = CFrame.new(hrp.Position.X, mapPlatform.Position.Y + 5, hrp.Position.Z)
+    end
+
+    local descendants = workspace:GetDescendants()
+    local chunkSize   = 200
+    task.spawn(function()
+        for i = 1, #descendants, chunkSize do
+            for j = i, math.min(i + chunkSize - 1, #descendants) do
+                hidePart(descendants[j], char)
+            end
+            task.wait()
+        end
+    end)
+
+    workspace.Terrain.WaterTransparency = 1
+
+    mapHideConnection = workspace.DescendantAdded:Connect(function(obj)
+        task.wait()
+        hidePart(obj, LocalPlayer.Character)
+    end)
+end
+
+local function showMap()
+    if mapHideConnection then
+        mapHideConnection:Disconnect()
+        mapHideConnection = nil
+    end
+
+    for obj, props in pairs(savedMapProps) do
+        if obj and obj.Parent then
+            obj.Transparency = props.Transparency
+            obj.CanCollide   = props.CanCollide
+            obj.CastShadow   = props.CastShadow
+        end
+    end
+    savedMapProps = {}
+
+    if mapPlatform then
+        mapPlatform:Destroy()
+        mapPlatform = nil
+    end
+
+    workspace.Terrain.WaterTransparency = 0
+end
+
+-- ================================================
+-- FEATURES
+-- ================================================
+local carrotFolder = workspace:WaitForChild("GameObjects"):WaitForChild("Carrots")
+
+local function collectCarrot(carrot)
+    if not RF then return end
+    local zone = carrot:GetAttribute("CarrotZone")
+    local guid = carrot:GetAttribute("CarrotGuid")
+    if zone and guid then
+        pcall(function() RF:InvokeServer(zone, guid) end)
+        Stats.carrots += 1
+        updateStatLabel("carrots")
+        carrot:Destroy()
+    end
+end
+
+local function startCollecting()
+    for _, carrot in ipairs(carrotFolder:GetChildren()) do
+        collectCarrot(carrot)
+    end
+    connection = carrotFolder.ChildAdded:Connect(function(carrot)
+        task.wait(0.05)
+        collectCarrot(carrot)
+    end)
+end
+
+local function stopCollecting()
+    if connection then
+        connection:Disconnect()
+        connection = nil
+    end
+end
+
+local function getOwnedPets()
+    if not PetRF then return {} end
+    local ok, pets = pcall(function()
+        return PetRF:InvokeServer(LocalPlayer)
+    end)
+    if ok and type(pets) == "table" then return pets end
+    return {}
+end
+
+-- ================================================
+-- AUTO HATCH
+-- ================================================
+local function startHatching()
+    while State.hatching do
+        if EggRF then
+            local ok, result = pcall(function()
+                return EggRF:InvokeServer("Bunny", nil, nil, true, true, true, nil)
+            end)
+            if ok and result then
+                Stats.eggs += getHatchCount()
+                updateStatLabel("eggs")
+            end
+        end
+        task.wait(0.15 + math.random(0, 5) / 100)
+    end
+end
+
+local function mutateBatch()
+    if not PetRF or not MutateRF then return end
+    local success, pets = pcall(function()
+        return PetRF:InvokeServer(LocalPlayer)
+    end)
+    if not success or typeof(pets) ~= "table" then return end
+    for uuid, data in pairs(pets) do
+        if not State.mutating then break end
+        if data and not data.Locked and not data.Cure then
+            pcall(function() MutateRF:InvokeServer(uuid, {}) end)
+            Stats.mutations += 1
+            updateStatLabel("mutations")
+            task.wait(math.random(40, 70) / 100)
+        end
+    end
+end
+
+local function startAutoMutate()
+    while State.mutating do
+        mutateBatch()
+        task.wait(2)
+    end
+end
+
+local function startAutoUpgrade()
+    while State.upgrading do
+        if UpgradeRF then
+            pcall(function() UpgradeRF:InvokeServer("BunnyBurrow", "MoreCarrots") end)
+            task.wait(0.2)
+            pcall(function() UpgradeRF:InvokeServer("BunnyBurrow", "MoreSpawns") end)
+        end
+        task.wait(math.random(40, 70) / 100)
+    end
+end
+
+local critTick = 0
+local function startClicking()
+    task.spawn(function()
+        while State.clicking do
+            if ClickRF then
+                pcall(function() ClickRF:InvokeServer(true) end)
+                Stats.clicks += 1
+                updateStatLabel("clicks")
+            end
+            critTick += 1
+            if CritRF and critTick % 5 == 0 then
+                pcall(function() CritRF:InvokeServer() end)
+            end
+            task.wait(0.04 + math.random(0, 10) / 1000)
+        end
+    end)
+end
+
+local function startAutoAscend()
+    while State.ascending do
+        if AscendRF then
+            pcall(function() AscendRF:InvokeServer("BunnyBurrow") end)
+        end
+        task.wait(math.random(3, 5))
+    end
+end
+
+local function startAutoRune()
+    while State.runing do
+        if RuneRF then
+            local ok, result = pcall(function()
+                return RuneRF:InvokeServer("BunnyBurrow")
+            end)
+            if ok and result then
+                Stats.runes += 1
+                updateStatLabel("runes")
+            end
+        end
+        task.wait(0.3 + math.random(10, 20) / 100)
+    end
+end
+
+-- ================================================
+-- UI
+-- ================================================
+
+MainTab:CreateToggle({
+    Name = "Auto Fight Boss",
+    Callback = function(v)
+        if v and not checkRemotes("Auto Fight Boss") then return end
+        State.clicking = v
+        critTick = 0
+        if v then task.spawn(startClicking) end
+    end
+})
+
+MainTab:CreateToggle({
+    Name = "Hide Map (Performance)",
+    Callback = function(v)
+        State.mapHidden = v
+        if v then
+            hideMap()
+            Rayfield:Notify({
+                Title    = "Map Hidden",
+                Content  = "World geometry hidden. Carrots and character unaffected.",
+                Duration = 4,
+                Image    = 4483362458,
+            })
+        else
+            showMap()
+            Rayfield:Notify({
+                Title    = "Map Restored",
+                Content  = "World geometry restored.",
+                Duration = 3,
+                Image    = 4483362458,
+            })
+        end
+    end
+})
+
+EventTab:CreateToggle({
+    Name = "Auto Collect Carrots",
+    Callback = function(v)
+        if v and not checkRemotes("Auto Collect Carrots") then return end
+        State.collecting = v
+        if v then
+            cancelStatsRemoval()
+            createStatsUI()
+            task.spawn(startCollecting)
+        else
+            stopCollecting()
+            scheduleStatsRemoval()
+        end
+    end
+})
+
+EventTab:CreateToggle({
+    Name = "Auto Hatch",
+    Callback = function(v)
+        if v and not checkRemotes("Auto Hatch") then return end
+        State.hatching = v
+        if v then task.spawn(startHatching) end
+    end
+})
+
+EventTab:CreateToggle({
+    Name = "Auto Upgrade",
+    Callback = function(v)
+        if v and not checkRemotes("Auto Upgrade") then return end
+        State.upgrading = v
+        if v then task.spawn(startAutoUpgrade) end
+    end
+})
+
+EventTab:CreateToggle({
+    Name = "Auto Ascend",
+    Callback = function(v)
+        if v and not checkRemotes("Auto Ascend") then return end
+        State.ascending = v
+        if v then task.spawn(startAutoAscend) end
+    end
+})
+
+EventTab:CreateToggle({
+    Name = "Auto Rune",
+    Callback = function(v)
+        if v and not checkRemotes("Auto Rune") then return end
+        State.runing = v
+        if v then
+            task.spawn(startAutoRune)
+            Rayfield:Notify({
+                Title    = "Auto Rune",
+                Content  = "Rolling runes — costs 1000 carrots each. Make sure Auto Collect is on!",
+                Duration = 5,
+                Image    = 4483362458,
+            })
+        end
+    end
+})
+
+MutateTab:CreateToggle({
+    Name = "Auto Mutate All Pets",
+    Callback = function(v)
+        if v and not checkRemotes("Auto Mutate") then return end
+        State.mutating = v
+        if v then task.spawn(startAutoMutate) end
+    end
+})
