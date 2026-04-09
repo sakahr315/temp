@@ -1,0 +1,2525 @@
+local v1 = game:GetService("Players")
+local v_u_2 = game:GetService("ReplicatedStorage")
+local v_u_3 = game:GetService("TweenService")
+local v_u_4 = game:GetService("RunService")
+local v_u_5 = game:GetService("MarketplaceService")
+local v_u_6 = v1.LocalPlayer
+local v_u_7 = v_u_6:WaitForChild("PlayerGui")
+local v8 = v_u_2:WaitForChild("MatchEvents")
+local v9 = v8:WaitForChild("MatchResult")
+local v_u_10 = v8:WaitForChild("UpdateAfterMatch")
+local v_u_11 = v_u_2:WaitForChild("DataEvents")
+local v_u_12 = nil
+local v_u_13 = v_u_2:FindFirstChild("MatchErrorFlag")
+if not v_u_13 then
+	v_u_13 = Instance.new("BindableEvent")
+	v_u_13.Name = "MatchErrorFlag"
+	v_u_13.Parent = v_u_2
+end
+local v_u_14 = Color3.fromRGB(12, 2, 26)
+local v_u_15 = Color3.fromRGB(8, 1, 18)
+local v_u_16 = Color3.fromRGB(18, 4, 34)
+local v_u_17 = Color3.fromRGB(24, 8, 42)
+local v_u_18 = Color3.fromRGB(184, 78, 130)
+local v_u_19 = Color3.fromRGB(107, 32, 128)
+local v_u_20 = Color3.fromRGB(224, 122, 154)
+local v_u_21 = Color3.fromRGB(212, 168, 48)
+local v_u_22 = Color3.fromRGB(255, 255, 255)
+local v_u_23 = Color3.fromRGB(160, 140, 175)
+local v_u_24 = Color3.fromRGB(90, 75, 110)
+local v_u_25 = Color3.fromRGB(50, 20, 70)
+local v_u_26 = Color3.fromRGB(74, 185, 110)
+local v_u_27 = Color3.fromRGB(220, 80, 80)
+local v_u_28 = Color3.fromRGB(200, 200, 80)
+local v_u_29 = Color3.fromRGB(10, 3, 22)
+local v_u_30 = Color3.fromRGB(28, 105, 50)
+local v_u_31 = Color3.fromRGB(24, 92, 44)
+local function v_u_40(p32)
+	-- upvalues: (copy) v_u_7, (copy) v_u_16, (copy) v_u_27, (copy) v_u_23, (copy) v_u_3
+	local v33 = v_u_7:FindFirstChild("GameGui")
+	if v33 and not v33:FindFirstChild("_MatchErrorToast") then
+		local v_u_34 = Instance.new("Frame")
+		v_u_34.Name = "_MatchErrorToast"
+		v_u_34.Size = UDim2.new(0, 360, 0, 68)
+		v_u_34.AnchorPoint = Vector2.new(0.5, 0)
+		v_u_34.Position = UDim2.new(0.5, 0, 0, -80)
+		v_u_34.BackgroundColor3 = v_u_16
+		v_u_34.BorderSizePixel = 0
+		v_u_34.ZIndex = 100
+		v_u_34.Parent = v33
+		Instance.new("UICorner", v_u_34).CornerRadius = UDim.new(0, 8)
+		local v35 = Instance.new("UIStroke", v_u_34)
+		v35.Color = v_u_27
+		v35.Thickness = 1
+		v35.Transparency = 0.45
+		local v36 = Instance.new("Frame", v_u_34)
+		v36.Size = UDim2.new(0, 3, 1, 0)
+		v36.BackgroundColor3 = v_u_27
+		v36.BorderSizePixel = 0
+		v36.ZIndex = 101
+		Instance.new("UICorner", v36).CornerRadius = UDim.new(0, 8)
+		local v37 = Instance.new("TextLabel", v_u_34)
+		v37.Size = UDim2.new(0, 40, 1, 0)
+		v37.Position = UDim2.new(0, 10, 0, 0)
+		v37.BackgroundTransparency = 1
+		v37.Text = "\226\154\160"
+		v37.TextSize = 22
+		v37.TextColor3 = v_u_27
+		v37.Font = Enum.Font.GothamBold
+		v37.TextXAlignment = Enum.TextXAlignment.Center
+		v37.ZIndex = 101
+		local v38 = Instance.new("TextLabel", v_u_34)
+		v38.Size = UDim2.new(1, -60, 0, 26)
+		v38.Position = UDim2.new(0, 52, 0, 10)
+		v38.BackgroundTransparency = 1
+		v38.Text = "LINEUP ERROR"
+		v38.TextSize = 12
+		v38.TextColor3 = v_u_27
+		v38.Font = Enum.Font.GothamBold
+		v38.TextXAlignment = Enum.TextXAlignment.Left
+		v38.ZIndex = 101
+		local v39 = Instance.new("TextLabel", v_u_34)
+		v39.Size = UDim2.new(1, -60, 0, 26)
+		v39.Position = UDim2.new(0, 52, 0, 34)
+		v39.BackgroundTransparency = 1
+		v39.Text = p32
+		v39.TextSize = 12
+		v39.TextColor3 = v_u_23
+		v39.Font = Enum.Font.Gotham
+		v39.TextXAlignment = Enum.TextXAlignment.Left
+		v39.TextWrapped = true
+		v39.ZIndex = 101
+		v_u_3:Create(v_u_34, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+			["Position"] = UDim2.new(0.5, 0, 0, 12)
+		}):Play()
+		task.delay(4, function()
+			-- upvalues: (copy) v_u_34, (ref) v_u_3
+			if v_u_34 and v_u_34.Parent then
+				v_u_3:Create(v_u_34, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
+					["Position"] = UDim2.new(0.5, 0, 0, -80)
+				}):Play()
+				task.delay(0.3, function()
+					-- upvalues: (ref) v_u_34
+					if v_u_34 and v_u_34.Parent then
+						v_u_34:Destroy()
+					end
+				end)
+			end
+		end)
+	end
+end
+task.spawn(function()
+	-- upvalues: (copy) v_u_11, (ref) v_u_12
+	local v41 = v_u_11:WaitForChild("FinanceBreakdown", 10)
+	if v41 then
+		v41.OnClientEvent:Connect(function(p42)
+			-- upvalues: (ref) v_u_12
+			v_u_12 = p42
+		end)
+	end
+end)
+local v_u_43 = v_u_2:WaitForChild("InjuryNotifEvent")
+local function v_u_49(p44)
+	-- upvalues: (copy) v_u_7, (copy) v_u_43
+	if p44 and #p44 ~= 0 then
+		local v_u_45 = {}
+		for _, v46 in ipairs(p44) do
+			local v47 = {
+				["name"] = v46.Name,
+				["injuryType"] = v46.injuryType,
+				["matchdaysLeft"] = v46.matchdaysLeft
+			}
+			table.insert(v_u_45, v47)
+		end
+		task.delay(0.35, function()
+			-- upvalues: (ref) v_u_7, (ref) v_u_43, (copy) v_u_45
+			local v48 = v_u_7:FindFirstChild("InjuryNotifGui")
+			if v48 then
+				v_u_43:Fire(v_u_45)
+				v48.Enabled = true
+			end
+		end)
+	end
+end
+local v_u_50 = v_u_7:WaitForChild("MatchGui")
+local v_u_51 = v_u_7:WaitForChild("GameGui")
+v_u_50.Enabled = false
+local v_u_52 = false
+local v53 = v_u_2:FindFirstChild("AutoplayFlag")
+if not v53 then
+	v53 = Instance.new("BindableEvent")
+	v53.Name = "AutoplayFlag"
+	v53.Parent = v_u_2
+end
+v53.Event:Connect(function(p54)
+	-- upvalues: (ref) v_u_52
+	v_u_52 = p54
+end)
+local function v_u_60()
+	-- upvalues: (copy) v_u_5, (copy) v_u_6
+	local v55 = false
+	local v56, v57 = pcall(function()
+		-- upvalues: (ref) v_u_5, (ref) v_u_6
+		return v_u_5:UserOwnsGamePassAsync(v_u_6.UserId, 1760995596)
+	end)
+	if not v56 then
+		v57 = false
+	end
+	local v58, v59 = pcall(function()
+		-- upvalues: (ref) v_u_5, (ref) v_u_6
+		return v_u_5:UserOwnsGamePassAsync(v_u_6.UserId, 1759459672)
+	end)
+	if not v58 then
+		v59 = v55
+	end
+	return v57 and v59 and 6 or ((v59 or v57) and 3 or 1)
+end
+local v_u_61 = {
+	{
+		["role"] = "GK",
+		["x"] = 0.06,
+		["y"] = 0.5
+	},
+	{
+		["role"] = "LB",
+		["x"] = 0.2,
+		["y"] = 0.18
+	},
+	{
+		["role"] = "CB",
+		["x"] = 0.2,
+		["y"] = 0.38
+	},
+	{
+		["role"] = "CB",
+		["x"] = 0.2,
+		["y"] = 0.62
+	},
+	{
+		["role"] = "RB",
+		["x"] = 0.2,
+		["y"] = 0.82
+	},
+	{
+		["role"] = "CM",
+		["x"] = 0.4,
+		["y"] = 0.28
+	},
+	{
+		["role"] = "CM",
+		["x"] = 0.4,
+		["y"] = 0.5
+	},
+	{
+		["role"] = "CM",
+		["x"] = 0.4,
+		["y"] = 0.72
+	},
+	{
+		["role"] = "LW",
+		["x"] = 0.62,
+		["y"] = 0.14
+	},
+	{
+		["role"] = "ST",
+		["x"] = 0.68,
+		["y"] = 0.5
+	},
+	{
+		["role"] = "RW",
+		["x"] = 0.62,
+		["y"] = 0.86
+	}
+}
+local v_u_62 = {
+	{
+		["role"] = "GK",
+		["x"] = 0.94,
+		["y"] = 0.5
+	},
+	{
+		["role"] = "LB",
+		["x"] = 0.8,
+		["y"] = 0.82
+	},
+	{
+		["role"] = "CB",
+		["x"] = 0.8,
+		["y"] = 0.62
+	},
+	{
+		["role"] = "CB",
+		["x"] = 0.8,
+		["y"] = 0.38
+	},
+	{
+		["role"] = "RB",
+		["x"] = 0.8,
+		["y"] = 0.18
+	},
+	{
+		["role"] = "CM",
+		["x"] = 0.6,
+		["y"] = 0.72
+	},
+	{
+		["role"] = "CM",
+		["x"] = 0.6,
+		["y"] = 0.5
+	},
+	{
+		["role"] = "CM",
+		["x"] = 0.6,
+		["y"] = 0.28
+	},
+	{
+		["role"] = "LW",
+		["x"] = 0.38,
+		["y"] = 0.86
+	},
+	{
+		["role"] = "ST",
+		["x"] = 0.32,
+		["y"] = 0.5
+	},
+	{
+		["role"] = "RW",
+		["x"] = 0.38,
+		["y"] = 0.14
+	}
+}
+local function v_u_72(p63, p64, p65, p66, p67, p68, p69, p70)
+	-- upvalues: (copy) v_u_22
+	local v71 = Instance.new("TextLabel")
+	v71.Size = p65
+	v71.Position = p66
+	v71.BackgroundTransparency = 1
+	v71.Text = p64
+	v71.TextSize = p67 or 13
+	v71.TextColor3 = p68 or v_u_22
+	v71.Font = p69 and Enum.Font.GothamBold or Enum.Font.Gotham
+	v71.TextXAlignment = p70 or Enum.TextXAlignment.Center
+	v71.TextWrapped = true
+	v71.Parent = p63
+	return v71
+end
+local v_u_73 = {
+	{
+		["br"] = 8
+	},
+	{
+		["br"] = 24
+	},
+	{
+		["br"] = 4
+	},
+	{
+		["br"] = 0
+	},
+	{
+		["br"] = 12
+	}
+}
+local v_u_74 = {
+	"\226\173\144",
+	"\226\154\161",
+	"\240\159\148\165",
+	"\240\159\166\129",
+	"\240\159\166\133",
+	"\240\159\144\186",
+	"\240\159\146\142",
+	"\240\159\140\153",
+	"\226\152\128",
+	"\226\154\148",
+	"\240\159\155\161",
+	"\240\159\145\145"
+}
+local function v_u_128(p75, p76, p77)
+	-- upvalues: (copy) v_u_73, (copy) v_u_74, (copy) v_u_16, (copy) v_u_72
+	local v78 = p77 or 36
+	local v79 = p76 and p76.primaryR and Color3.fromRGB(p76.primaryR, p76.primaryG, p76.primaryB) or Color3.fromRGB(30, 100, 200)
+	local v80 = p76 and p76.secondaryR and Color3.fromRGB(p76.secondaryR, p76.secondaryG, p76.secondaryB) or Color3.fromRGB(200, 40, 40)
+	local v81 = v_u_73[p76 and (p76.shape or 1) or 1] or v_u_73[1]
+	local v82 = v_u_74[p76 and p76.symbol or 1] or "\226\173\144"
+	local v83 = UDim2.new
+	local v84 = v78 * 1.1
+	local v85 = v83(0, v78, 0, (math.floor(v84)))
+	local v86 = UDim2.new
+	local v87 = -v78 / 2
+	local v88 = v78 * 0.55
+	local v89 = v86(0.5, v87, 0.5, -math.floor(v88))
+	local v90 = Instance.new("Frame")
+	v90.Size = v85
+	v90.Position = v89
+	v90.BackgroundColor3 = v79 or v_u_16
+	v90.BackgroundTransparency = 0
+	v90.BorderSizePixel = 0
+	v90.Parent = p75
+	Instance.new("UICorner", v90).CornerRadius = UDim.new(0, v81.br)
+	local v91 = UDim2.new
+	local v92 = v78 * 0.6
+	local v93 = math.floor(v92)
+	local v94 = v78 * 0.6
+	local v95 = v91(0, v93, 0, (math.floor(v94)))
+	local v96 = UDim2.new
+	local v97 = v78 * 0.3
+	local v98 = -math.floor(v97)
+	local v99 = v78 * 0.18
+	local v100 = v96(0.5, v98, 0.5, (math.floor(v99)))
+	local v101 = Instance.new("Frame")
+	v101.Size = v95
+	v101.Position = v100
+	v101.BackgroundColor3 = v79 or v_u_16
+	v101.BackgroundTransparency = 0
+	v101.BorderSizePixel = 0
+	v101.Parent = p75
+	v101.Rotation = 45
+	Instance.new("UICorner", v101).CornerRadius = UDim.new(0, v81.br)
+	local v102 = UDim2.new
+	local v103 = v78 * 0.55
+	local v104 = math.floor(v103)
+	local v105 = v78 * 1.1
+	local v106 = v102(0, v104, 0, (math.floor(v105)))
+	local v107 = UDim2.new
+	local v108 = v78 * 0.27
+	local v109 = -math.floor(v108)
+	local v110 = v78 * 0.55
+	local v111 = v107(0.5, v109, 0.5, -math.floor(v110))
+	local v112 = Instance.new("Frame")
+	v112.Size = v106
+	v112.Position = v111
+	v112.BackgroundColor3 = v80 or v_u_16
+	v112.BackgroundTransparency = 0
+	v112.BorderSizePixel = 0
+	v112.Parent = p75
+	v112.ClipsDescendants = false
+	Instance.new("UICorner", v112).CornerRadius = UDim.new(0, v81.br)
+	local v113 = UDim2.new
+	local v114 = v78 * 0.38
+	local v115 = math.floor(v114)
+	local v116 = v78 * 0.38
+	local v117 = v113(0, v115, 0, (math.floor(v116)))
+	local v118 = UDim2.new
+	local v119 = v78 * 0.19
+	local v120 = -math.floor(v119)
+	local v121 = v78 * 0.28
+	local v122 = v118(0.5, v120, 0.5, (math.floor(v121)))
+	local v123 = Instance.new("Frame")
+	v123.Size = v117
+	v123.Position = v122
+	v123.BackgroundColor3 = v80 or v_u_16
+	v123.BackgroundTransparency = 0
+	v123.BorderSizePixel = 0
+	v123.Parent = p75
+	v123.Rotation = 45
+	local v124 = v_u_72
+	local v125 = UDim2.new(0, v78, 0, v78)
+	local v126 = UDim2.new(0.5, -v78 / 2, 0.5, -v78 * 0.45)
+	local v127 = v78 * 0.38
+	v124(p75, v82, v125, v126, math.floor(v127), Color3.fromRGB(255, 255, 255), true).ZIndex = 5
+end
+local function v_u_193(p_u_129)
+	-- upvalues: (copy) v_u_50, (copy) v_u_16, (copy) v_u_25, (copy) v_u_3, (copy) v_u_51, (copy) v_u_72, (copy) v_u_20, (copy) v_u_18, (copy) v_u_19, (copy) v_u_21, (copy) v_u_22, (copy) v_u_23
+	local v130 = v_u_50
+	local v131 = UDim2.new(1, 0, 1, 0)
+	local v132 = UDim2.new(0, 0, 0, 0)
+	local v133 = Color3.fromRGB(0, 0, 0)
+	local v_u_134 = Instance.new("Frame")
+	v_u_134.Size = v131
+	v_u_134.Position = v132
+	v_u_134.BackgroundColor3 = v133 or v_u_16
+	v_u_134.BackgroundTransparency = 0.55
+	v_u_134.BorderSizePixel = 0
+	v_u_134.Parent = v130
+	v_u_134.ZIndex = 8
+	local v135 = v_u_50
+	local v136 = UDim2.new(1, 0, 0, 210)
+	local v137 = UDim2.new(0, 0, 1, 0)
+	local v138 = Color3.fromRGB(16, 4, 30)
+	local v_u_139 = Instance.new("Frame")
+	v_u_139.Size = v136
+	v_u_139.Position = v137
+	v_u_139.BackgroundColor3 = v138 or v_u_16
+	v_u_139.BackgroundTransparency = 0
+	v_u_139.BorderSizePixel = 0
+	v_u_139.Parent = v135
+	v_u_139.ZIndex = 9
+	Instance.new("UICorner", v_u_139).CornerRadius = UDim.new(0, 16)
+	local v140 = Instance.new("UIStroke", v_u_139)
+	v140.Color = v_u_25
+	v140.Thickness = 1
+	v140.Transparency = 0.2
+	v140.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	v_u_3:Create(v_u_139, TweenInfo.new(0.28, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
+		["Position"] = UDim2.new(0, 0, 1, -210)
+	}):Play()
+	local function v_u_142(p_u_141)
+		-- upvalues: (ref) v_u_3, (copy) v_u_139, (copy) v_u_134
+		v_u_3:Create(v_u_139, TweenInfo.new(0.2, Enum.EasingStyle.Quint), {
+			["Position"] = UDim2.new(0, 0, 1, 0)
+		}):Play()
+		v_u_3:Create(v_u_134, TweenInfo.new(0.2), {
+			["BackgroundTransparency"] = 1
+		}):Play()
+		task.delay(0.22, function()
+			-- upvalues: (ref) v_u_139, (ref) v_u_134, (copy) p_u_141
+			if v_u_139.Parent then
+				v_u_139:Destroy()
+			end
+			if v_u_134.Parent then
+				v_u_134:Destroy()
+			end
+			if p_u_141 then
+				p_u_141()
+			end
+		end)
+	end
+	local v143 = Instance.new("TextButton")
+	v143.Size = UDim2.new(1, 0, 1, 0)
+	v143.Position = UDim2.new(0, 0, 0, 0)
+	v143.BackgroundTransparency = 1
+	v143.BorderSizePixel = 0
+	v143.Text = ""
+	v143.AutoButtonColor = false
+	v143.ZIndex = 8
+	v143.Parent = v_u_134
+	v143.MouseButton1Click:Connect(function()
+		-- upvalues: (copy) v_u_142, (ref) v_u_50, (ref) v_u_51
+		v_u_142(function()
+			-- upvalues: (ref) v_u_50, (ref) v_u_51
+			v_u_50.Enabled = false
+			v_u_51.Enabled = true
+		end)
+	end)
+	local v144 = UDim2.new(0, 40, 0, 4)
+	local v145 = UDim2.new(0.5, -20, 0, 8)
+	local v146 = v_u_25
+	local v147 = Instance.new("Frame")
+	v147.Size = v144
+	v147.Position = v145
+	v147.BackgroundColor3 = v146 or v_u_16
+	v147.BackgroundTransparency = 0
+	v147.BorderSizePixel = 0
+	v147.Parent = v_u_139
+	v147.ZIndex = 10
+	Instance.new("UICorner", v147).CornerRadius = UDim.new(1, 0)
+	v_u_72(v_u_139, "SELECT MATCH VIEW", UDim2.new(1, 0, 0, 22), UDim2.new(0, 0, 0, 18), 12, v_u_20, true).ZIndex = 10
+	local v148 = {
+		{
+			["id"] = "2D",
+			["title"] = "2D MATCH",
+			["icon"] = "\226\154\189",
+			["accent"] = v_u_18,
+			["accent2"] = v_u_19,
+			["bullets"] = { "Full stadium", "Animated ball", "Live ticker" }
+		},
+		{
+			["id"] = "highlights",
+			["title"] = "HIGHLIGHTS",
+			["icon"] = "\240\159\147\139",
+			["accent"] = v_u_21,
+			["accent2"] = Color3.fromRGB(150, 100, 10),
+			["bullets"] = { "Key events only", "Faster", "Autoplay ready" }
+		}
+	}
+	local v_u_149 = "2D"
+	local v_u_150 = {}
+	for v151, v_u_152 in ipairs(v148) do
+		local v153 = v151 == 1 and 0 or 0.5
+		local v154 = v151 == 1 and 10 or 4
+		local v155 = UDim2.new(0.5, -14, 0, 110)
+		local v156 = UDim2.new(v153, v154, 0, 46)
+		local v157 = Color3.fromRGB(26, 10, 46)
+		local v158 = Instance.new("Frame")
+		v158.Size = v155
+		v158.Position = v156
+		v158.BackgroundColor3 = v157 or v_u_16
+		v158.BackgroundTransparency = 0
+		v158.BorderSizePixel = 0
+		v158.Parent = v_u_139
+		v158.ZIndex = 10
+		Instance.new("UICorner", v158).CornerRadius = UDim.new(0, 10)
+		local v159 = UDim2.new(1, 0, 0, 3)
+		local v160 = UDim2.new(0, 0, 0, 0)
+		local v161 = v_u_152.accent
+		local v162 = Instance.new("Frame")
+		v162.Size = v159
+		v162.Position = v160
+		v162.BackgroundColor3 = v161 or v_u_16
+		v162.BackgroundTransparency = 0
+		v162.BorderSizePixel = 0
+		v162.Parent = v158
+		v162.ZIndex = 11
+		Instance.new("UICorner", v162).CornerRadius = UDim.new(0, 10)
+		local v163 = Instance.new("UIStroke")
+		v163.Color = v_u_152.accent
+		v163.Thickness = 2
+		v163.Transparency = 1
+		v163.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+		v163.Parent = v158
+		local v164 = v_u_152.icon
+		local v165 = UDim2.new(0, 28, 0, 28)
+		local v166 = UDim2.new(0, 8, 0, 8)
+		local v167 = v_u_152.accent
+		local v168 = Instance.new("TextLabel")
+		v168.Size = v165
+		v168.Position = v166
+		v168.BackgroundTransparency = 1
+		v168.Text = v164
+		v168.TextSize = 18
+		v168.TextColor3 = v167 or v_u_22
+		v168.Font = Enum.Font.Gotham
+		v168.TextXAlignment = Enum.TextXAlignment.Center
+		v168.TextWrapped = true
+		v168.Parent = v158
+		v168.ZIndex = 11
+		local v169 = v_u_152.title
+		local v170 = UDim2.new(1, -44, 0, 28)
+		local v171 = UDim2.new(0, 40, 0, 8)
+		local v172 = v_u_152.accent
+		local v173 = Enum.TextXAlignment.Left
+		local v174 = Instance.new("TextLabel")
+		v174.Size = v170
+		v174.Position = v171
+		v174.BackgroundTransparency = 1
+		v174.Text = v169
+		v174.TextSize = 12
+		v174.TextColor3 = v172 or v_u_22
+		v174.Font = Enum.Font.GothamBold or Enum.Font.Gotham
+		v174.TextXAlignment = v173 or Enum.TextXAlignment.Center
+		v174.TextWrapped = true
+		v174.Parent = v158
+		v174.ZIndex = 11
+		local v175 = 40
+		for _, v176 in ipairs(v_u_152.bullets) do
+			local v177 = "\194\183  " .. v176
+			local v178 = UDim2.new(1, -12, 0, 16)
+			local v179 = UDim2.new(0, 8, 0, v175)
+			local v180 = v_u_23
+			local v181 = Enum.TextXAlignment.Left
+			local v182 = Instance.new("TextLabel")
+			v182.Size = v178
+			v182.Position = v179
+			v182.BackgroundTransparency = 1
+			v182.Text = v177
+			v182.TextSize = 10
+			v182.TextColor3 = v180 or v_u_22
+			v182.Font = Enum.Font.Gotham
+			v182.TextXAlignment = v181 or Enum.TextXAlignment.Center
+			v182.TextWrapped = true
+			v182.Parent = v158
+			v182.ZIndex = 11
+			v175 = v175 + 18
+		end
+		local v183 = Instance.new("TextButton")
+		v183.Size = UDim2.new(1, 0, 1, 0)
+		v183.Position = UDim2.new(0, 0, 0, 0)
+		v183.BackgroundTransparency = 1
+		v183.BorderSizePixel = 0
+		v183.Text = ""
+		v183.AutoButtonColor = false
+		v183.ZIndex = 12
+		v183.Parent = v158
+		v_u_150[v_u_152.id] = {
+			["card"] = v158,
+			["topBar"] = v162,
+			["stroke"] = v163
+		}
+		v183.MouseButton1Click:Connect(function()
+			-- upvalues: (ref) v_u_149, (copy) v_u_152, (copy) v_u_150, (ref) v_u_3
+			v_u_149 = v_u_152.id
+			for v184, v185 in pairs(v_u_150) do
+				if v184 == v_u_149 then
+					v_u_3:Create(v185.card, TweenInfo.new(0.12), {
+						["BackgroundColor3"] = Color3.fromRGB(38, 14, 62)
+					}):Play()
+					v185.stroke.Transparency = 0.1
+					v185.topBar.BackgroundTransparency = 0
+				else
+					v_u_3:Create(v185.card, TweenInfo.new(0.12), {
+						["BackgroundColor3"] = Color3.fromRGB(26, 10, 46)
+					}):Play()
+					v185.stroke.Transparency = 1
+					v185.topBar.BackgroundTransparency = 0.6
+				end
+			end
+		end)
+	end
+	v_u_150["2D"].card.BackgroundColor3 = Color3.fromRGB(38, 14, 62)
+	v_u_150["2D"].stroke.Transparency = 0.1
+	v_u_150["2D"].topBar.BackgroundTransparency = 0
+	v_u_150.highlights.topBar.BackgroundTransparency = 0.6
+	local v_u_186 = Instance.new("TextButton")
+	v_u_186.Size = UDim2.new(1, -20, 0, 36)
+	v_u_186.Position = UDim2.new(0, 10, 0, 166)
+	v_u_186.BackgroundColor3 = v_u_18
+	v_u_186.BorderSizePixel = 0
+	v_u_186.Text = "\226\150\182   PLAY"
+	v_u_186.TextColor3 = v_u_22
+	v_u_186.Font = Enum.Font.GothamBold
+	v_u_186.TextSize = 14
+	v_u_186.AutoButtonColor = false
+	v_u_186.ZIndex = 10
+	v_u_186.Parent = v_u_139
+	Instance.new("UICorner", v_u_186).CornerRadius = UDim.new(0, 8)
+	local v187 = v_u_20
+	local v188 = v_u_19
+	local v189 = Instance.new("UIGradient")
+	v189.Color = ColorSequence.new(v187, v188)
+	v189.Rotation = 135
+	v189.Parent = v_u_186
+	v_u_186.MouseEnter:Connect(function()
+		-- upvalues: (ref) v_u_3, (copy) v_u_186, (ref) v_u_20
+		local v190 = {
+			["BackgroundColor3"] = v_u_20
+		}
+		v_u_3:Create(v_u_186, TweenInfo.new(0.1), v190):Play()
+	end)
+	v_u_186.MouseLeave:Connect(function()
+		-- upvalues: (ref) v_u_3, (copy) v_u_186, (ref) v_u_18
+		local v191 = {
+			["BackgroundColor3"] = v_u_18
+		}
+		v_u_3:Create(v_u_186, TweenInfo.new(0.1), v191):Play()
+	end)
+	v_u_186.MouseButton1Click:Connect(function()
+		-- upvalues: (ref) v_u_149, (copy) v_u_142, (copy) p_u_129
+		local v_u_192 = v_u_149
+		v_u_142(function()
+			-- upvalues: (ref) p_u_129, (copy) v_u_192
+			p_u_129(v_u_192)
+		end)
+	end)
+end
+local function v_u_581(p_u_194)
+	-- upvalues: (copy) v_u_60, (copy) v_u_18, (copy) v_u_50, (copy) v_u_14, (copy) v_u_16, (copy) v_u_15, (copy) v_u_25, (copy) v_u_17, (copy) v_u_22, (copy) v_u_24, (copy) v_u_128, (copy) v_u_6, (copy) v_u_29, (copy) v_u_19, (copy) v_u_3, (copy) v_u_21, (copy) v_u_20, (copy) v_u_30, (copy) v_u_31, (copy) v_u_61, (copy) v_u_62, (copy) v_u_4, (copy) v_u_23, (copy) v_u_51, (copy) v_u_49, (copy) v_u_27, (copy) v_u_26, (copy) v_u_28, (copy) v_u_10, (ref) v_u_12
+	local v195 = 30 / v_u_60()
+	local v_u_196 = 90 / (math.max(5, v195) / 0.05)
+	local v197 = p_u_194.logo
+	local v_u_198 = v197 and v197.primaryR and Color3.fromRGB(v197.primaryR, v197.primaryG, v197.primaryB) or v_u_18
+	local v_u_199 = v197 and (v197.secondaryR and Color3.fromRGB(v197.secondaryR, v197.secondaryG, v197.secondaryB)) or Color3.fromRGB(220, 235, 255)
+	local v200 = 0
+	for v201 = 1, #(p_u_194.aiTeam or "AI") do
+		local v202 = p_u_194.aiTeam
+		v200 = v200 + string.byte(v202, v201)
+	end
+	math.randomseed(v200)
+	local v_u_203 = Color3.fromHSV(v200 % 12 / 12, 0.75, 0.9)
+	local v_u_204 = Color3.fromHSV((v200 + 6) % 12 / 12, 0.45, 1)
+	math.randomseed(os.time())
+	local v205 = v_u_50
+	local v206 = UDim2.new(1, 0, 1, 0)
+	local v207 = UDim2.new(0, 0, 0, 0)
+	local v208 = v_u_14
+	local v_u_209 = Instance.new("Frame")
+	v_u_209.Size = v206
+	v_u_209.Position = v207
+	v_u_209.BackgroundColor3 = v208 or v_u_16
+	v_u_209.BackgroundTransparency = 0
+	v_u_209.BorderSizePixel = 0
+	v_u_209.Parent = v205
+	v_u_209.ZIndex = 2
+	local v210 = Color3.fromRGB(12, 2, 26)
+	local v211 = Color3.fromRGB(40, 8, 55)
+	local v212 = Instance.new("UIGradient")
+	v212.Color = ColorSequence.new(v210, v211)
+	v212.Rotation = 160
+	v212.Parent = v_u_209
+	local v213 = UDim2.new(1, 0, 0, 60)
+	local v214 = UDim2.new(0, 0, 0, 0)
+	local v215 = v_u_15
+	local v216 = Instance.new("Frame")
+	v216.Size = v213
+	v216.Position = v214
+	v216.BackgroundColor3 = v215 or v_u_16
+	v216.BackgroundTransparency = 0.28
+	v216.BorderSizePixel = 0
+	v216.Parent = v_u_209
+	v216.ZIndex = 3
+	local v217 = v_u_25
+	local v218 = Instance.new("UIStroke")
+	v218.Color = v217 or v_u_25
+	v218.Thickness = 1
+	v218.Transparency = 0.45
+	v218.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	v218.Parent = v216
+	local v219 = UDim2.new(1, 0, 0, 2)
+	local v220 = UDim2.new(0, 0, 1, -2)
+	local v221 = v_u_18
+	local v222 = Instance.new("Frame")
+	v222.Size = v219
+	v222.Position = v220
+	v222.BackgroundColor3 = v221 or v_u_16
+	v222.BackgroundTransparency = 0.45
+	v222.BorderSizePixel = 0
+	v222.Parent = v216
+	v222.ZIndex = 4
+	local v223 = UDim2.new(0, 200, 0, 48)
+	local v224 = UDim2.new(0.5, -100, 0.5, -24)
+	local v225 = v_u_17
+	local v226 = Instance.new("Frame")
+	v226.Size = v223
+	v226.Position = v224
+	v226.BackgroundColor3 = v225 or v_u_16
+	v226.BackgroundTransparency = 0.22
+	v226.BorderSizePixel = 0
+	v226.Parent = v216
+	v226.ZIndex = 4
+	local v227 = UDim.new(0, 8)
+	local v228 = Instance.new("UICorner")
+	v228.CornerRadius = v227 or UDim.new(0, 8)
+	v228.Parent = v226
+	local v229 = v_u_18
+	local v230 = Instance.new("UIStroke")
+	v230.Color = v229 or v_u_25
+	v230.Thickness = 1
+	v230.Transparency = 0.45
+	v230.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	v230.Parent = v226
+	local v231 = UDim2.new(0.36, 0, 1, 0)
+	local v232 = UDim2.new(0, 0, 0, 0)
+	local v_u_233 = Instance.new("TextLabel")
+	v_u_233.Size = v231
+	v_u_233.Position = v232
+	v_u_233.BackgroundTransparency = 1
+	v_u_233.Text = "0"
+	v_u_233.TextSize = 28
+	v_u_233.TextColor3 = v_u_198 or v_u_22
+	v_u_233.Font = Enum.Font.GothamBold or Enum.Font.Gotham
+	v_u_233.TextXAlignment = Enum.TextXAlignment.Center
+	v_u_233.TextWrapped = true
+	v_u_233.Parent = v226
+	v_u_233.ZIndex = 5
+	local v234 = UDim2.new(0.28, 0, 1, 0)
+	local v235 = UDim2.new(0.36, 0, 0, 0)
+	local v236 = v_u_24
+	local v237 = Instance.new("TextLabel")
+	v237.Size = v234
+	v237.Position = v235
+	v237.BackgroundTransparency = 1
+	v237.Text = "\226\128\147"
+	v237.TextSize = 22
+	v237.TextColor3 = v236 or v_u_22
+	v237.Font = Enum.Font.GothamBold or Enum.Font.Gotham
+	v237.TextXAlignment = Enum.TextXAlignment.Center
+	v237.TextWrapped = true
+	v237.Parent = v226
+	v237.ZIndex = 5
+	local v238 = UDim2.new(0.36, 0, 1, 0)
+	local v239 = UDim2.new(0.64, 0, 0, 0)
+	local v_u_240 = Instance.new("TextLabel")
+	v_u_240.Size = v238
+	v_u_240.Position = v239
+	v_u_240.BackgroundTransparency = 1
+	v_u_240.Text = "0"
+	v_u_240.TextSize = 28
+	v_u_240.TextColor3 = v_u_203 or v_u_22
+	v_u_240.Font = Enum.Font.GothamBold or Enum.Font.Gotham
+	v_u_240.TextXAlignment = Enum.TextXAlignment.Center
+	v_u_240.TextWrapped = true
+	v_u_240.Parent = v226
+	v_u_240.ZIndex = 5
+	local v_u_241 = Instance.new("TextLabel")
+	v_u_241.Size = UDim2.new(0, 50, 0, 14)
+	v_u_241.AnchorPoint = Vector2.new(0.5, 0)
+	v_u_241.Position = UDim2.new(0.5, 0, 1, -16)
+	v_u_241.BackgroundTransparency = 1
+	v_u_241.Text = "0\'"
+	v_u_241.TextColor3 = v_u_24
+	v_u_241.Font = Enum.Font.Gotham
+	v_u_241.TextSize = 10
+	v_u_241.TextXAlignment = Enum.TextXAlignment.Center
+	v_u_241.ZIndex = 4
+	v_u_241.Parent = v216
+	local v242 = Instance.new("Frame")
+	v242.Size = UDim2.new(0, 32, 0, 32)
+	v242.AnchorPoint = Vector2.new(1, 0.5)
+	v242.Position = UDim2.new(0.5, -108, 0.5, 0)
+	v242.BackgroundTransparency = 1
+	v242.ZIndex = 5
+	v242.Parent = v216
+	v_u_128(v242, p_u_194.logo, 28)
+	local v243 = Instance.new("TextLabel")
+	v243.Size = UDim2.new(0.5, -148, 1, 0)
+	v243.Position = UDim2.new(0, 8, 0, 0)
+	v243.BackgroundTransparency = 1
+	v243.Text = p_u_194.teamName or v_u_6.Name
+	v243.TextSize = 12
+	v243.TextColor3 = v_u_22
+	v243.Font = Enum.Font.GothamBold
+	v243.TextXAlignment = Enum.TextXAlignment.Right
+	v243.TextTruncate = Enum.TextTruncate.AtEnd
+	v243.TextWrapped = false
+	v243.ZIndex = 4
+	v243.Parent = v216
+	local v244 = Instance.new("Frame")
+	v244.Size = UDim2.new(0, 32, 0, 32)
+	v244.AnchorPoint = Vector2.new(0, 0.5)
+	v244.Position = UDim2.new(0.5, 108, 0.5, 0)
+	v244.BackgroundColor3 = v_u_203
+	v244.ZIndex = 5
+	v244.Parent = v216
+	local v245 = UDim.new(1, 0)
+	local v246 = Instance.new("UICorner")
+	v246.CornerRadius = v245 or UDim.new(0, 8)
+	v246.Parent = v244
+	local v247 = p_u_194.aiTeam or "AI"
+	local v248 = string.sub(v247, 1, 2):upper()
+	local v249 = UDim2.new(1, 0, 1, 0)
+	local v250 = UDim2.new(0, 0, 0, 0)
+	local v251 = Color3.fromRGB(255, 255, 255)
+	local v252 = Instance.new("TextLabel")
+	v252.Size = v249
+	v252.Position = v250
+	v252.BackgroundTransparency = 1
+	v252.Text = v248
+	v252.TextSize = 10
+	v252.TextColor3 = v251 or v_u_22
+	v252.Font = Enum.Font.GothamBold or Enum.Font.Gotham
+	v252.TextXAlignment = Enum.TextXAlignment.Center
+	v252.TextWrapped = true
+	v252.Parent = v244
+	v252.ZIndex = 6
+	local v253 = Instance.new("TextLabel")
+	v253.Size = UDim2.new(0.5, -148, 1, 0)
+	v253.Position = UDim2.new(0.5, 148, 0, 0)
+	v253.BackgroundTransparency = 1
+	v253.Text = p_u_194.aiTeam or "AI Team"
+	v253.TextSize = 12
+	v253.TextColor3 = v_u_24
+	v253.Font = Enum.Font.GothamBold
+	v253.TextXAlignment = Enum.TextXAlignment.Left
+	v253.TextTruncate = Enum.TextTruncate.AtEnd
+	v253.TextWrapped = false
+	v253.ZIndex = 4
+	v253.Parent = v216
+	local v254 = UDim2.new(1, 0, 1, -60)
+	local v255 = UDim2.new(0, 0, 0, 60)
+	local v256 = v_u_14
+	local v257 = Instance.new("Frame")
+	v257.Size = v254
+	v257.Position = v255
+	v257.BackgroundColor3 = v256 or v_u_16
+	v257.BackgroundTransparency = 0
+	v257.BorderSizePixel = 0
+	v257.Parent = v_u_209
+	v257.ZIndex = 2
+	local v258 = UDim2.new(1, 0, 0, 48)
+	local v259 = UDim2.new(0, 0, 0, 0)
+	local v260 = v_u_29
+	local v261 = Instance.new("Frame")
+	v261.Size = v258
+	v261.Position = v259
+	v261.BackgroundColor3 = v260 or v_u_16
+	v261.BackgroundTransparency = 0
+	v261.BorderSizePixel = 0
+	v261.Parent = v257
+	local v262 = UDim2.new(1, 0, 0, 48)
+	local v263 = UDim2.new(0, 0, 1, -48)
+	local v264 = v_u_29
+	local v265 = Instance.new("Frame")
+	v265.Size = v262
+	v265.Position = v263
+	v265.BackgroundColor3 = v264 or v_u_16
+	v265.BackgroundTransparency = 0
+	v265.BorderSizePixel = 0
+	v265.Parent = v257
+	local v266 = UDim2.new(0, 48, 1, -96)
+	local v267 = UDim2.new(0, 0, 0, 48)
+	local v268 = v_u_29
+	local v269 = Instance.new("Frame")
+	v269.Size = v266
+	v269.Position = v267
+	v269.BackgroundColor3 = v268 or v_u_16
+	v269.BackgroundTransparency = 0
+	v269.BorderSizePixel = 0
+	v269.Parent = v257
+	local v270 = v269
+	local v271 = UDim2.new(0, 48, 1, -96)
+	local v272 = UDim2.new(1, -48, 0, 48)
+	local v273 = v_u_29
+	local v274 = Instance.new("Frame")
+	v274.Size = v271
+	v274.Position = v272
+	v274.BackgroundColor3 = v273 or v_u_16
+	v274.BackgroundTransparency = 0
+	v274.BorderSizePixel = 0
+	v274.Parent = v257
+	for _, v275 in ipairs({
+		v261,
+		v265,
+		v270,
+		v274
+	}) do
+		v275.ZIndex = 3
+		local v276 = v_u_19
+		local v277 = Instance.new("UIStroke")
+		v277.Color = v276 or v_u_25
+		v277.Thickness = 1
+		v277.Transparency = 0.45
+		v277.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+		v277.Parent = v275
+	end
+	local v_u_278 = {}
+	local function v294(p279, p280, p281, p282)
+		-- upvalues: (copy) v_u_198, (copy) v_u_203, (copy) v_u_199, (copy) v_u_204, (ref) v_u_16, (copy) v_u_278
+		local v283 = p280 and v_u_198 or v_u_203
+		local v284 = p280 and v_u_199 or v_u_204
+		local v285 = 1 / p281
+		local v286 = 1 / p282
+		for v287 = 0, p282 - 1 do
+			for v288 = 0, p281 - 1 do
+				local v289 = UDim2.new(v285, -2, v286, -2)
+				local v290 = UDim2.new(v288 * v285, 1, v287 * v286, 1)
+				local v291 = (v287 + v288) % 2 == 0 and v283 and v283 or v284
+				local v292 = Instance.new("Frame")
+				v292.Size = v289
+				v292.Position = v290
+				v292.BackgroundColor3 = v291 or v_u_16
+				v292.BackgroundTransparency = 0
+				v292.BorderSizePixel = 0
+				v292.Parent = p279
+				v292.ZIndex = 4
+				Instance.new("UICorner", v292).CornerRadius = UDim.new(0.5, 0)
+				local v293 = v_u_278
+				table.insert(v293, {
+					["dot"] = v292,
+					["isHome"] = p280
+				})
+			end
+		end
+	end
+	v294(v270, true, 4, 12)
+	v294(v274, false, 4, 12)
+	v294(v261, true, 28, 3)
+	v294(v265, false, 28, 3)
+	local v295 = UDim2.new(0, 18, 0, 18)
+	local v296 = UDim2.new(0, 2, 0, 2)
+	local v297 = v_u_22
+	local v298 = Instance.new("TextLabel")
+	v298.Size = v295
+	v298.Position = v296
+	v298.BackgroundTransparency = 1
+	v298.Text = "\240\159\154\169"
+	v298.TextSize = 13
+	v298.TextColor3 = v297 or v_u_22
+	v298.Font = Enum.Font.GothamBold or Enum.Font.Gotham
+	v298.TextXAlignment = Enum.TextXAlignment.Center
+	v298.TextWrapped = true
+	v298.Parent = v270
+	v298.ZIndex = 5
+	local v299 = UDim2.new(0, 18, 0, 18)
+	local v300 = UDim2.new(0, 2, 0, 2)
+	local v301 = v_u_22
+	local v302 = Instance.new("TextLabel")
+	v302.Size = v299
+	v302.Position = v300
+	v302.BackgroundTransparency = 1
+	v302.Text = "\240\159\154\169"
+	v302.TextSize = 13
+	v302.TextColor3 = v301 or v_u_22
+	v302.Font = Enum.Font.GothamBold or Enum.Font.Gotham
+	v302.TextXAlignment = Enum.TextXAlignment.Center
+	v302.TextWrapped = true
+	v302.Parent = v274
+	v302.ZIndex = 5
+	local v_u_303 = true
+	task.spawn(function()
+		-- upvalues: (ref) v_u_303, (copy) v_u_278, (ref) v_u_3
+		while v_u_303 do
+			task.wait(0.35 + math.random() * 0.3)
+			for _, v304 in ipairs(v_u_278) do
+				if math.random() < 0.12 then
+					v_u_3:Create(v304.dot, TweenInfo.new(0.18), {
+						["Position"] = v304.dot.Position - UDim2.new(0, 0, 0, 3)
+					}):Play()
+					task.wait(0.18)
+					v_u_3:Create(v304.dot, TweenInfo.new(0.18), {
+						["Position"] = v304.dot.Position + UDim2.new(0, 0, 0, 3)
+					}):Play()
+				end
+			end
+		end
+	end)
+	local function v_u_310(p_u_305)
+		-- upvalues: (copy) v_u_278, (ref) v_u_3, (ref) v_u_21, (ref) v_u_20, (copy) v_u_198, (copy) v_u_203
+		for _, v_u_306 in ipairs(v_u_278) do
+			if v_u_306.isHome == p_u_305 then
+				task.spawn(function()
+					-- upvalues: (ref) v_u_3, (copy) v_u_306, (ref) v_u_21, (ref) v_u_20, (copy) p_u_305, (ref) v_u_198, (ref) v_u_203
+					task.wait(math.random() * 0.35)
+					local v307 = {
+						["BackgroundColor3"] = v_u_21
+					}
+					v_u_3:Create(v_u_306.dot, TweenInfo.new(0.1), v307):Play()
+					task.wait(0.15)
+					local v308 = {
+						["BackgroundColor3"] = v_u_20
+					}
+					v_u_3:Create(v_u_306.dot, TweenInfo.new(0.1), v308):Play()
+					task.wait(0.15)
+					local v309 = {
+						["BackgroundColor3"] = p_u_305 and v_u_198 or v_u_203
+					}
+					v_u_3:Create(v_u_306.dot, TweenInfo.new(0.3), v309):Play()
+				end)
+			end
+		end
+	end
+	local v311 = UDim2.new(1, -96, 1, -96)
+	local v312 = UDim2.new(0, 48, 0, 48)
+	local v313 = v_u_30
+	local v_u_314 = Instance.new("Frame")
+	v_u_314.Size = v311
+	v_u_314.Position = v312
+	v_u_314.BackgroundColor3 = v313 or v_u_16
+	v_u_314.BackgroundTransparency = 0
+	v_u_314.BorderSizePixel = 0
+	v_u_314.Parent = v257
+	v_u_314.ZIndex = 3
+	local v315 = UDim.new(0, 4)
+	local v316 = Instance.new("UICorner")
+	v316.CornerRadius = v315 or UDim.new(0, 8)
+	v316.Parent = v_u_314
+	local v_u_317 = v_u_303
+	for v318 = 0, 9 do
+		if v318 % 2 == 0 then
+			local v319 = UDim2.new(0.1, 0, 1, 0)
+			local v320 = UDim2.new(v318 * 0.1, 0, 0, 0)
+			local v321 = v_u_31
+			local v322 = Instance.new("Frame")
+			v322.Size = v319
+			v322.Position = v320
+			v322.BackgroundColor3 = v321 or v_u_16
+			v322.BackgroundTransparency = 0
+			v322.BorderSizePixel = 0
+			v322.Parent = v_u_314
+			v322.ZIndex = 3
+		end
+	end
+	local function v334(p323, p324, p325, p326, p327, p328)
+		-- upvalues: (copy) v_u_314, (ref) v_u_16
+		local v329 = v_u_314
+		local v330 = UDim2.new(p323, p327 or 0, p324, p328 or 0)
+		local v331 = UDim2.new(p325, 0, p326, 0)
+		local v332 = Color3.fromRGB(255, 255, 255)
+		local v333 = Instance.new("Frame")
+		v333.Size = v330
+		v333.Position = v331
+		v333.BackgroundColor3 = v332 or v_u_16
+		v333.BackgroundTransparency = 0.5
+		v333.BorderSizePixel = 0
+		v333.Parent = v329
+		v333.ZIndex = 4
+		return v333
+	end
+	v334(1, 0, 0, 0, 0, 2)
+	v334(1, 0, 0, 1, 0, 2)
+	v334(0, 1, 0, 0, 2, 0)
+	v334(0, 1, 1, 0, 2, 0)
+	v334(0, 1, 0.5, 0, 2, 0)
+	local v335 = UDim2.new(0, 80, 0, 80)
+	local v336 = UDim2.new(0.5, -40, 0.5, -40)
+	local v337 = Color3.fromRGB(0, 0, 0)
+	local v338 = Instance.new("Frame")
+	v338.Size = v335
+	v338.Position = v336
+	v338.BackgroundColor3 = v337 or v_u_16
+	v338.BackgroundTransparency = 1
+	v338.BorderSizePixel = 0
+	v338.Parent = v_u_314
+	Instance.new("UICorner", v338).CornerRadius = UDim.new(1, 0)
+	v338.ZIndex = 4
+	local v339 = Instance.new("UIStroke", v338)
+	v339.Color = Color3.fromRGB(255, 255, 255)
+	v339.Transparency = 0.5
+	v339.Thickness = 1.5
+	local v340 = UDim2.new(0, 6, 0, 6)
+	local v341 = UDim2.new(0.5, -3, 0.5, -3)
+	local v342 = Color3.fromRGB(255, 255, 255)
+	local v343 = Instance.new("Frame")
+	v343.Size = v340
+	v343.Position = v341
+	v343.BackgroundColor3 = v342 or v_u_16
+	v343.BackgroundTransparency = 0.4
+	v343.BorderSizePixel = 0
+	v343.Parent = v_u_314
+	Instance.new("UICorner", v343).CornerRadius = UDim.new(1, 0)
+	v343.ZIndex = 5
+	local function v352(p344, p345)
+		-- upvalues: (copy) v_u_314, (ref) v_u_16
+		local v346 = v_u_314
+		local v347 = UDim2.new(0.16, 0, 0.42, 0)
+		local v348 = UDim2.new(p345, 0, 0.29, 0)
+		local v349 = Color3.fromRGB(0, 0, 0)
+		local v350 = Instance.new("Frame")
+		v350.Size = v347
+		v350.Position = v348
+		v350.BackgroundColor3 = v349 or v_u_16
+		v350.BackgroundTransparency = 1
+		v350.BorderSizePixel = 0
+		v350.Parent = v346
+		v350.AnchorPoint = Vector2.new(p344, 0)
+		v350.ZIndex = 4
+		local v351 = Instance.new("UIStroke", v350)
+		v351.Color = Color3.fromRGB(255, 255, 255)
+		v351.Transparency = 0.5
+		v351.Thickness = 1.5
+	end
+	v352(0, 0)
+	v352(1, 1)
+	local function v360(p353, p354)
+		-- upvalues: (copy) v_u_314, (ref) v_u_16
+		local v355 = v_u_314
+		local v356 = UDim2.new(0, 8, 0.14, 0)
+		local v357 = UDim2.new(p354, 0, 0.43, 0)
+		local v358 = Color3.fromRGB(255, 255, 255)
+		local v359 = Instance.new("Frame")
+		v359.Size = v356
+		v359.Position = v357
+		v359.BackgroundColor3 = v358 or v_u_16
+		v359.BackgroundTransparency = 0.2
+		v359.BorderSizePixel = 0
+		v359.Parent = v355
+		v359.AnchorPoint = Vector2.new(p353, 0)
+		v359.ZIndex = 5
+		Instance.new("UIStroke", v359).Color = Color3.fromRGB(200, 200, 200)
+	end
+	v360(1, 0)
+	v360(0, 1)
+	local function v374(p361, p362, p363, p364, p365)
+		-- upvalues: (ref) v_u_16, (ref) v_u_22
+		local v366 = UDim2.new(0, 26, 0, 26)
+		local v367 = UDim2.new(p361.x, 0, p361.y, 0)
+		local v368 = Instance.new("Frame")
+		v368.Size = v366
+		v368.Position = v367
+		v368.BackgroundColor3 = p362 or v_u_16
+		v368.BackgroundTransparency = 0
+		v368.BorderSizePixel = 0
+		v368.Parent = p365
+		v368.AnchorPoint = Vector2.new(0.5, 0.5)
+		v368.ZIndex = 6
+		Instance.new("UICorner", v368).CornerRadius = UDim.new(1, 0)
+		local v369 = Instance.new("UIStroke", v368)
+		v369.Color = p363
+		v369.Thickness = 2.5
+		local v370 = UDim2.new(1, 0, 1, 0)
+		local v371 = UDim2.new(0, 0, 0, 0)
+		local v372 = Color3.fromRGB(255, 255, 255)
+		local v373 = Instance.new("TextLabel")
+		v373.Size = v370
+		v373.Position = v371
+		v373.BackgroundTransparency = 1
+		v373.Text = p364
+		v373.TextSize = 8
+		v373.TextColor3 = v372 or v_u_22
+		v373.Font = Enum.Font.GothamBold or Enum.Font.Gotham
+		v373.TextXAlignment = Enum.TextXAlignment.Center
+		v373.TextWrapped = true
+		v373.Parent = v368
+		v373.ZIndex = 7
+		return v368
+	end
+	local v375 = p_u_194.lineup or {}
+	local v_u_376 = {}
+	local v_u_377 = {}
+	for v378, v379 in ipairs(v_u_61) do
+		local v380 = v375[v378]
+		if v380 then
+			local v381 = v380.Name:match("%S+$") or v380.Name
+			v382 = string.sub(v381, 1, 4)
+			if v382 then
+				goto l91
+			end
+		end
+		local v382 = v379.role
+		::l91::
+		v_u_376[v378] = {
+			["dot"] = v374(v379, v_u_198, v_u_199, v382, v_u_314),
+			["baseX"] = v379.x,
+			["baseY"] = v379.y,
+			["targetX"] = v379.x,
+			["targetY"] = v379.y,
+			["currX"] = v379.x,
+			["currY"] = v379.y
+		}
+	end
+	for v383, v384 in ipairs(v_u_62) do
+		v_u_377[v383] = {
+			["dot"] = v374(v384, v_u_203, v_u_204, v384.role, v_u_314),
+			["baseX"] = v384.x,
+			["baseY"] = v384.y,
+			["targetX"] = v384.x,
+			["targetY"] = v384.y,
+			["currX"] = v384.x,
+			["currY"] = v384.y
+		}
+	end
+	local v385 = UDim2.new(0, 13, 0, 13)
+	local v386 = UDim2.new(0.5, 0, 0.5, 0)
+	local v387, v388 = Color3.fromRGB(240, 240, 240)
+	local v389 = Instance.new("Frame")
+	v389.Size = v385
+	v389.Position = v386
+	v389.BackgroundColor3 = v387 or v_u_16
+	v389.BackgroundTransparency = v388 or 0
+	v389.BorderSizePixel = 0
+	v389.Parent = v_u_314
+	local v_u_390 = v389
+	v_u_390.AnchorPoint = Vector2.new(0.5, 0.5)
+	v_u_390.ZIndex = 8
+	Instance.new("UICorner", v_u_390).CornerRadius = UDim.new(1, 0)
+	local v391 = Instance.new("UIStroke", v_u_390)
+	v391.Color = Color3.fromRGB(60, 60, 60)
+	v391.Thickness = 1
+	local v_u_392 = 0.5
+	local v_u_393 = 0.5
+	local v_u_394 = 0.5
+	local v_u_395 = 0.5
+	local v_u_403 = v_u_4.RenderStepped:Connect(function(p396)
+		-- upvalues: (ref) v_u_394, (ref) v_u_392, (ref) v_u_395, (ref) v_u_393, (copy) v_u_390, (copy) v_u_376, (copy) v_u_377
+		local v397 = 8 * p396
+		local v398 = math.min(1, v397)
+		v_u_394 = v_u_394 + (v_u_392 - v_u_394) * v398
+		v_u_395 = v_u_395 + (v_u_393 - v_u_395) * v398
+		v_u_390.Position = UDim2.new(v_u_394, 0, v_u_395, 0)
+		local v399 = 5 * p396
+		local v400 = math.min(1, v399)
+		for _, v401 in ipairs(v_u_376) do
+			v401.currX = v401.currX + (v401.targetX - v401.currX) * v400
+			v401.currY = v401.currY + (v401.targetY - v401.currY) * v400
+			v401.dot.Position = UDim2.new(v401.currX, 0, v401.currY, 0)
+		end
+		for _, v402 in ipairs(v_u_377) do
+			v402.currX = v402.currX + (v402.targetX - v402.currX) * v400
+			v402.currY = v402.currY + (v402.targetY - v402.currY) * v400
+			v402.dot.Position = UDim2.new(v402.currX, 0, v402.currY, 0)
+		end
+	end)
+	local v_u_404 = true
+	task.spawn(function()
+		-- upvalues: (ref) v_u_404, (copy) v_u_376, (copy) v_u_377, (ref) v_u_392, (ref) v_u_393
+		while v_u_404 do
+			task.wait(0.55 + math.random() * 0.4)
+			local v405 = {}
+			for _, v406 in ipairs(v_u_376) do
+				table.insert(v405, v406)
+			end
+			for _, v407 in ipairs(v_u_377) do
+				table.insert(v405, v407)
+			end
+			for _ = 1, math.random(2, 4) do
+				local v408 = v405[math.random(1, #v405)]
+				local v409 = v408.baseX + (math.random() - 0.5) * 0.07
+				v408.targetX = math.clamp(v409, 0.02, 0.98)
+				local v410 = v408.baseY + (math.random() - 0.5) * 0.07
+				v408.targetY = math.clamp(v410, 0.02, 0.98)
+			end
+			local v411 = 0.22 + math.random() * 0.56
+			local v412 = 0.14 + math.random() * 0.72
+			v_u_392 = v411
+			v_u_393 = v412
+		end
+	end)
+	local v_u_413 = Instance.new("ScrollingFrame")
+	v_u_413.Size = UDim2.new(0.52, 0, 0, 130)
+	v_u_413.Position = UDim2.new(0.24, 0, 1, -186)
+	v_u_413.BackgroundColor3 = v_u_16
+	v_u_413.BackgroundTransparency = 0.15
+	v_u_413.BorderSizePixel = 0
+	v_u_413.ScrollBarThickness = 2
+	v_u_413.ScrollBarImageColor3 = v_u_18
+	v_u_413.CanvasSize = UDim2.new(0, 0, 0, 0)
+	v_u_413.AutomaticCanvasSize = Enum.AutomaticSize.Y
+	v_u_413.ZIndex = 8
+	v_u_413.Parent = v257
+	local v414 = UDim.new(0, 8)
+	local v415 = Instance.new("UICorner")
+	v415.CornerRadius = v414 or UDim.new(0, 8)
+	v415.Parent = v_u_413
+	local v416 = v_u_18
+	local v417 = Instance.new("UIStroke")
+	v417.Color = v416 or v_u_25
+	v417.Thickness = 1
+	v417.Transparency = 0.45
+	v417.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	v417.Parent = v_u_413
+	local v418 = Instance.new("UIListLayout", v_u_413)
+	v418.SortOrder = Enum.SortOrder.LayoutOrder
+	v418.Padding = UDim.new(0, 2)
+	local v419 = Instance.new("UIPadding", v_u_413)
+	v419.PaddingLeft = UDim.new(0, 5)
+	v419.PaddingTop = UDim.new(0, 4)
+	local function v_u_435(p420, p421, p422)
+		-- upvalues: (copy) v_u_413, (ref) v_u_17, (ref) v_u_16, (ref) v_u_22
+		local v423 = v_u_413
+		local v424 = UDim2.new(1, 0, 0, 24)
+		local v425 = UDim2.new(0, 0, 0, 0)
+		local v426 = v_u_17
+		local v427 = Instance.new("Frame")
+		v427.Size = v424
+		v427.Position = v425
+		v427.BackgroundColor3 = v426 or v_u_16
+		v427.BackgroundTransparency = 0.3
+		v427.BorderSizePixel = 0
+		v427.Parent = v423
+		local v428 = UDim.new(0, 4)
+		local v429 = Instance.new("UICorner")
+		v429.CornerRadius = v428 or UDim.new(0, 8)
+		v429.Parent = v427
+		v427.ZIndex = 9
+		local v430 = UDim2.new(1, -8, 1, 0)
+		local v431 = UDim2.new(0, 4, 0, 0)
+		local v432 = p421 or v_u_22
+		local v433 = Enum.TextXAlignment.Left
+		local v434 = Instance.new("TextLabel")
+		v434.Size = v430
+		v434.Position = v431
+		v434.BackgroundTransparency = 1
+		v434.Text = p420
+		v434.TextSize = 11
+		v434.TextColor3 = v432 or v_u_22
+		v434.Font = (p422 or false) and Enum.Font.GothamBold or Enum.Font.Gotham
+		v434.TextXAlignment = v433 or Enum.TextXAlignment.Center
+		v434.TextWrapped = true
+		v434.Parent = v427
+		v434.ZIndex = 10
+		task.wait()
+		v_u_413.CanvasPosition = Vector2.new(0, v_u_413.AbsoluteCanvasSize.Y)
+	end
+	local v436 = UDim2.new(0.72, 0, 0, 120)
+	local v437 = UDim2.new(0.14, 0, 1, -128)
+	local v438 = v_u_16
+	local v_u_439 = Instance.new("Frame")
+	v_u_439.Size = v436
+	v_u_439.Position = v437
+	v_u_439.BackgroundColor3 = v438 or v_u_16
+	v_u_439.BackgroundTransparency = 0.15
+	v_u_439.BorderSizePixel = 0
+	v_u_439.Parent = v_u_209
+	v_u_439.Visible = false
+	v_u_439.ZIndex = 12
+	local v440 = UDim.new(0, 12)
+	local v441 = Instance.new("UICorner")
+	v441.CornerRadius = v440 or UDim.new(0, 8)
+	v441.Parent = v_u_439
+	local v442 = v_u_18
+	local v_u_443 = Instance.new("UIStroke")
+	v_u_443.Color = v442 or v_u_25
+	v_u_443.Thickness = 1
+	v_u_443.Transparency = 0.45
+	v_u_443.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	v_u_443.Parent = v_u_439
+	local v444 = UDim2.new(1, 0, 0, 3)
+	local v445 = UDim2.new(0, 0, 0, 0)
+	local v446 = v_u_18
+	local v447 = Instance.new("Frame")
+	v447.Size = v444
+	v447.Position = v445
+	v447.BackgroundColor3 = v446 or v_u_16
+	v447.BackgroundTransparency = 0
+	v447.BorderSizePixel = 0
+	v447.Parent = v_u_439
+	local v_u_448 = v447
+	v_u_448.ZIndex = 13
+	local v449 = UDim.new(0, 12)
+	local v450 = Instance.new("UICorner")
+	v450.CornerRadius = v449 or UDim.new(0, 8)
+	v450.Parent = v_u_448
+	local v451 = UDim2.new(0.55, 0, 0, 36)
+	local v452 = UDim2.new(0, 14, 0, 10)
+	local v453 = v_u_22
+	local v454 = Enum.TextXAlignment.Left
+	local v455 = Instance.new("TextLabel")
+	v455.Size = v451
+	v455.Position = v452
+	v455.BackgroundTransparency = 1
+	v455.Text = ""
+	v455.TextSize = 20
+	v455.TextColor3 = v453 or v_u_22
+	v455.Font = Enum.Font.GothamBold or Enum.Font.Gotham
+	v455.TextXAlignment = v454 or Enum.TextXAlignment.Center
+	v455.TextWrapped = true
+	v455.Parent = v_u_439
+	local v_u_456 = v455
+	v_u_456.ZIndex = 13
+	local v457 = UDim2.new(0.55, 0, 0, 68)
+	local v458 = UDim2.new(0, 14, 0, 44)
+	local v459 = v_u_23
+	local v460 = Enum.TextXAlignment.Left
+	local v461 = Instance.new("TextLabel")
+	v461.Size = v457
+	v461.Position = v458
+	v461.BackgroundTransparency = 1
+	v461.Text = ""
+	v461.TextSize = 11
+	v461.TextColor3 = v459 or v_u_22
+	v461.Font = Enum.Font.Gotham
+	v461.TextXAlignment = v460 or Enum.TextXAlignment.Center
+	v461.TextWrapped = true
+	v461.Parent = v_u_439
+	local v_u_462 = v461
+	v_u_462.ZIndex = 13
+	local v_u_463 = Instance.new("TextButton")
+	v_u_463.Size = UDim2.new(0, 140, 0, 42)
+	v_u_463.AnchorPoint = Vector2.new(1, 0.5)
+	v_u_463.Position = UDim2.new(1, -14, 0.5, 0)
+	v_u_463.BackgroundColor3 = v_u_18
+	v_u_463.BorderSizePixel = 0
+	v_u_463.Text = "CONTINUE  \226\134\146"
+	v_u_463.TextColor3 = v_u_22
+	v_u_463.Font = Enum.Font.GothamBold
+	v_u_463.TextSize = 13
+	v_u_463.AutoButtonColor = false
+	v_u_463.ZIndex = 13
+	v_u_463.Parent = v_u_439
+	local v464 = UDim.new(0, 8)
+	local v465 = Instance.new("UICorner")
+	v465.CornerRadius = v464 or UDim.new(0, 8)
+	v465.Parent = v_u_463
+	local v466 = v_u_20
+	local v467 = v_u_19
+	local v468 = Instance.new("UIGradient")
+	v468.Color = ColorSequence.new(v466, v467)
+	v468.Rotation = 135
+	v468.Parent = v_u_463
+	v_u_463.MouseEnter:Connect(function()
+		-- upvalues: (ref) v_u_3, (copy) v_u_463, (ref) v_u_20
+		local v469 = {
+			["BackgroundColor3"] = v_u_20
+		}
+		v_u_3:Create(v_u_463, TweenInfo.new(0.15), v469):Play()
+	end)
+	v_u_463.MouseLeave:Connect(function()
+		-- upvalues: (ref) v_u_3, (copy) v_u_463, (ref) v_u_18
+		local v470 = {
+			["BackgroundColor3"] = v_u_18
+		}
+		v_u_3:Create(v_u_463, TweenInfo.new(0.15), v470):Play()
+	end)
+	v_u_463.MouseButton1Click:Connect(function()
+		-- upvalues: (ref) v_u_403, (ref) v_u_317, (ref) v_u_404, (copy) v_u_209, (ref) v_u_50, (ref) v_u_51, (ref) v_u_49, (copy) p_u_194
+		v_u_403:Disconnect()
+		v_u_317 = false
+		v_u_404 = false
+		v_u_209:Destroy()
+		v_u_50.Enabled = false
+		v_u_51.Enabled = true
+		v_u_49(p_u_194.newInjuries)
+	end)
+	local v_u_471 = 0
+	local v_u_472 = 0
+	local v_u_473 = 0
+	local v_u_474 = 1
+	local v_u_475 = p_u_194.highlights
+	local v_u_476 = false
+	task.spawn(function()
+		-- upvalues: (ref) v_u_473, (ref) v_u_476, (copy) v_u_196, (copy) v_u_241, (ref) v_u_474, (copy) v_u_475, (copy) v_u_376, (copy) v_u_377, (ref) v_u_392, (ref) v_u_393, (copy) v_u_209, (ref) v_u_16, (ref) v_u_18, (ref) v_u_27, (ref) v_u_20, (ref) v_u_22, (ref) v_u_3, (copy) v_u_390, (copy) v_u_310, (ref) v_u_471, (copy) v_u_233, (ref) v_u_21, (copy) v_u_198, (ref) v_u_472, (copy) v_u_240, (copy) v_u_435, (ref) v_u_26, (ref) v_u_404, (ref) v_u_317, (copy) p_u_194, (copy) v_u_448, (copy) v_u_443, (ref) v_u_28, (copy) v_u_456, (copy) v_u_439, (ref) v_u_10, (ref) v_u_12, (copy) v_u_462, (ref) v_u_24
+		while true do
+			if v_u_473 >= 90 or v_u_476 then
+				return
+			end
+			task.wait(0.05)
+			local v477 = v_u_473 + v_u_196
+			v_u_473 = math.min(90, v477)
+			local v478 = v_u_473
+			v_u_241.Text = math.floor(v478) .. "\'"
+			while v_u_474 <= #v_u_475 do
+				local v479 = v_u_473
+				if v_u_475[v_u_474].minute > math.floor(v479) then
+					break
+				end
+				local v480 = v_u_475[v_u_474]
+				v_u_474 = v_u_474 + 1
+				if v480.isGoal then
+					local v481 = v480.team == "home"
+					local v482 = v481 and v_u_376[10] or v_u_377[10]
+					local v483 = v481 and 0.9 or 0.1
+					v482.targetX = v483
+					v482.targetY = 0.5
+					v_u_392 = v483
+					v_u_393 = 0.5
+					task.wait(0.4)
+					local v484 = v_u_209
+					local v485 = UDim2.new(1, 0, 1, 0)
+					local v486 = UDim2.new(0, 0, 0, 0)
+					local v487 = v481 and Color3.fromRGB(20, 5, 40) or Color3.fromRGB(60, 0, 0)
+					local v488 = Instance.new("Frame")
+					v488.Size = v485
+					v488.Position = v486
+					v488.BackgroundColor3 = v487 or v_u_16
+					v488.BackgroundTransparency = 0.3
+					v488.BorderSizePixel = 0
+					v488.Parent = v484
+					v488.ZIndex = 20
+					local v489 = UDim2.new(0, 320, 0, 80)
+					local v490 = UDim2.new(0.5, -160, 0.5, -40)
+					local v491 = v_u_16
+					local v492 = Instance.new("Frame")
+					v492.Size = v489
+					v492.Position = v490
+					v492.BackgroundColor3 = v491 or v_u_16
+					v492.BackgroundTransparency = 0.15
+					v492.BorderSizePixel = 0
+					v492.Parent = v488
+					v492.ZIndex = 21
+					local v493 = UDim.new(0, 12)
+					local v494 = Instance.new("UICorner")
+					v494.CornerRadius = v493 or UDim.new(0, 8)
+					v494.Parent = v492
+					local v495 = UDim2.new(1, 0, 0, 4)
+					local v496 = UDim2.new(0, 0, 0, 0)
+					local v497 = v481 and v_u_18 or v_u_27
+					local v498 = Instance.new("Frame")
+					v498.Size = v495
+					v498.Position = v496
+					v498.BackgroundColor3 = v497 or v_u_16
+					v498.BackgroundTransparency = 0
+					v498.BorderSizePixel = 0
+					v498.Parent = v492
+					v498.ZIndex = 22
+					local v499 = UDim.new(0, 12)
+					local v500 = Instance.new("UICorner")
+					v500.CornerRadius = v499 or UDim.new(0, 8)
+					v500.Parent = v498
+					local v501 = UDim2.new(1, 0, 1, 0)
+					local v502 = UDim2.new(0, 0, 0, 0)
+					local v503 = v481 and v_u_20 or v_u_27
+					local v504 = Instance.new("TextLabel")
+					v504.Size = v501
+					v504.Position = v502
+					v504.BackgroundTransparency = 1
+					v504.Text = "\226\154\189  GOAL!"
+					v504.TextSize = 32
+					v504.TextColor3 = v503 or v_u_22
+					v504.Font = Enum.Font.GothamBold or Enum.Font.Gotham
+					v504.TextXAlignment = Enum.TextXAlignment.Center
+					v504.TextWrapped = true
+					v504.Parent = v492
+					v504.ZIndex = 22
+					v_u_3:Create(v_u_390, TweenInfo.new(0.12), {
+						["Size"] = UDim2.new(0, 20, 0, 20)
+					}):Play()
+					task.wait(0.12)
+					v_u_3:Create(v_u_390, TweenInfo.new(0.12), {
+						["Size"] = UDim2.new(0, 13, 0, 13)
+					}):Play()
+					v_u_310(v481)
+					task.wait(0.85)
+					v_u_3:Create(v488, TweenInfo.new(0.25), {
+						["BackgroundTransparency"] = 1
+					}):Play()
+					task.wait(0.3)
+					v488:Destroy()
+					if v481 then
+						v_u_471 = v_u_471 + 1
+						local v505 = v_u_471
+						v_u_233.Text = tostring(v505)
+						local v506 = {
+							["TextColor3"] = v_u_21
+						}
+						v_u_3:Create(v_u_233, TweenInfo.new(0.15), v506):Play()
+						task.delay(0.35, function()
+							-- upvalues: (ref) v_u_3, (ref) v_u_233, (ref) v_u_198
+							local v507 = {
+								["TextColor3"] = v_u_198
+							}
+							v_u_3:Create(v_u_233, TweenInfo.new(0.25), v507):Play()
+						end)
+					else
+						v_u_472 = v_u_472 + 1
+						local v508 = v_u_472
+						v_u_240.Text = tostring(v508)
+					end
+					v_u_392 = 0.5
+					v_u_393 = 0.5
+					v482.targetX = v482.baseX
+					v482.targetY = v482.baseY
+					v_u_435(v480.text, v481 and v_u_26 or v_u_27, true)
+				elseif v480.isRedCard then
+					local v509 = v_u_209
+					local v510 = UDim2.new(1, 0, 1, 0)
+					local v511 = UDim2.new(0, 0, 0, 0)
+					local v512 = Color3.fromRGB(80, 0, 0)
+					local v513 = Instance.new("Frame")
+					v513.Size = v510
+					v513.Position = v511
+					v513.BackgroundColor3 = v512 or v_u_16
+					v513.BackgroundTransparency = 0.45
+					v513.BorderSizePixel = 0
+					v513.Parent = v509
+					v513.ZIndex = 20
+					local v514 = UDim2.new(0, 300, 0, 72)
+					local v515 = UDim2.new(0.5, -150, 0.5, -36)
+					local v516 = v_u_16
+					local v517 = Instance.new("Frame")
+					v517.Size = v514
+					v517.Position = v515
+					v517.BackgroundColor3 = v516 or v_u_16
+					v517.BackgroundTransparency = 0.15
+					v517.BorderSizePixel = 0
+					v517.Parent = v513
+					v517.ZIndex = 21
+					local v518 = UDim.new(0, 12)
+					local v519 = Instance.new("UICorner")
+					v519.CornerRadius = v518 or UDim.new(0, 8)
+					v519.Parent = v517
+					local v520 = UDim2.new(1, 0, 0, 4)
+					local v521 = UDim2.new(0, 0, 0, 0)
+					local v522 = v_u_27
+					local v523 = Instance.new("Frame")
+					v523.Size = v520
+					v523.Position = v521
+					v523.BackgroundColor3 = v522 or v_u_16
+					v523.BackgroundTransparency = 0
+					v523.BorderSizePixel = 0
+					v523.Parent = v517
+					v523.ZIndex = 22
+					local v524 = UDim2.new(1, 0, 1, 0)
+					local v525 = UDim2.new(0, 0, 0, 0)
+					local v526 = v_u_27
+					local v527 = Instance.new("TextLabel")
+					v527.Size = v524
+					v527.Position = v525
+					v527.BackgroundTransparency = 1
+					v527.Text = "\240\159\159\165  RED CARD!"
+					v527.TextSize = 28
+					v527.TextColor3 = v526 or v_u_22
+					v527.Font = Enum.Font.GothamBold or Enum.Font.Gotham
+					v527.TextXAlignment = Enum.TextXAlignment.Center
+					v527.TextWrapped = true
+					v527.Parent = v517
+					v527.ZIndex = 22
+					task.wait(0.9)
+					v_u_3:Create(v513, TweenInfo.new(0.25), {
+						["BackgroundTransparency"] = 1
+					}):Play()
+					task.wait(0.3)
+					v513:Destroy()
+					v_u_435(v480.text, v_u_27, false)
+				elseif v480.isFinal then
+					v_u_476 = true
+					v_u_404 = false
+					v_u_317 = false
+					local v528, v529
+					if p_u_194.result == "Win" then
+						v528 = v_u_26
+						v_u_448.BackgroundColor3 = v_u_18
+						v_u_443.Color = v_u_26
+						v_u_310(true)
+						v529 = "VICTORY!"
+					elseif p_u_194.result == "Loss" then
+						v528 = v_u_27
+						v_u_448.BackgroundColor3 = v_u_27
+						v_u_443.Color = v_u_27
+						v_u_310(false)
+						v529 = "DEFEAT"
+					else
+						v528 = v_u_28
+						v_u_448.BackgroundColor3 = v_u_28
+						v_u_443.Color = v_u_28
+						v529 = "DRAW"
+					end
+					v_u_435(v480.text, v_u_22, false)
+					task.wait(0.5)
+					v_u_456.Text = v529
+					v_u_456.TextColor3 = v528
+					v_u_439.Visible = true
+					v_u_10:FireServer(p_u_194.result, p_u_194.earnings.Total, p_u_194.updatedLeague, nil, p_u_194.newInjuries, {
+						["aiTeam"] = p_u_194.aiTeam,
+						["hGoals"] = v_u_471,
+						["aGoals"] = v_u_472,
+						["isHome"] = not p_u_194.isAway
+					})
+					task.spawn(function()
+						-- upvalues: (ref) v_u_12, (ref) p_u_194, (ref) v_u_462
+						local v530 = 0
+						while not v_u_12 and v530 < 30 do
+							task.wait(0.1)
+							v530 = v530 + 1
+						end
+						local v531 = p_u_194.earnings
+						local v532 = v_u_12 or {}
+						if v531.IsHome then
+							local v533 = v531.Attendance
+							local v534 = tostring(v533)
+							local v535 = v531.Capacity
+							v546 = "\240\159\143\160 Home  \240\159\145\165 " .. v534 .. "/" .. tostring(v535)
+							if v546 then
+								goto l9
+							end
+						end
+						local v536 = "\226\156\136\239\184\143 Away  -"
+						local v537 = v531.AwayCost or 0
+						local v538
+						if v537 >= 1000000 then
+							v538 = string.format("$%.1fM", v537 / 1000000)
+						elseif v537 >= 1000 then
+							local v539 = string.format
+							local v540 = v537 / 1000
+							v538 = v539("$%dK", (math.floor(v540)))
+						else
+							v538 = "$" .. v537
+						end
+						local v541 = " +"
+						local v542 = v531.AwayRefund or 0
+						local v543
+						if v542 >= 1000000 then
+							v543 = string.format("$%.1fM", v542 / 1000000)
+						elseif v542 >= 1000 then
+							local v544 = string.format
+							local v545 = v542 / 1000
+							v543 = v544("$%dK", (math.floor(v545)))
+						else
+							v543 = "$" .. v542
+						end
+						local v546 = v536 .. v538 .. v541 .. v543
+						::l9::
+						local v547 = v_u_462
+						local v548 = "\n\240\159\146\176 "
+						local v549 = v531.Total
+						local v550
+						if v549 >= 1000000 then
+							v550 = string.format("$%.1fM", v549 / 1000000)
+						elseif v549 >= 1000 then
+							local v551 = string.format
+							local v552 = v549 / 1000
+							v550 = v551("$%dK", (math.floor(v552)))
+						else
+							v550 = "$" .. v549
+						end
+						local v553 = "  \240\159\142\175 "
+						local v554 = v531.Sponsor
+						local v555
+						if v554 >= 1000000 then
+							v555 = string.format("$%.1fM", v554 / 1000000)
+						elseif v554 >= 1000 then
+							local v556 = string.format
+							local v557 = v554 / 1000
+							v555 = v556("$%dK", (math.floor(v557)))
+						else
+							v555 = "$" .. v554
+						end
+						local v558 = "\n\240\159\145\149 -"
+						local v559 = v532.salaries or 0
+						local v560
+						if v559 >= 1000000 then
+							v560 = string.format("$%.1fM", v559 / 1000000)
+						elseif v559 >= 1000 then
+							local v561 = string.format
+							local v562 = v559 / 1000
+							v560 = v561("$%dK", (math.floor(v562)))
+						else
+							v560 = "$" .. v559
+						end
+						local v563 = "  \240\159\167\145\226\128\141\240\159\146\188 -"
+						local v564 = v532.coachSalary or 0
+						local v565
+						if v564 >= 1000000 then
+							v565 = string.format("$%.1fM", v564 / 1000000)
+						elseif v564 >= 1000 then
+							local v566 = string.format
+							local v567 = v564 / 1000
+							v565 = v566("$%dK", (math.floor(v567)))
+						else
+							v565 = "$" .. v564
+						end
+						local v568 = "\n\226\156\133 Net: "
+						local v569 = v532.net or v531.Total
+						local v570
+						if v569 >= 1000000 then
+							v570 = string.format("$%.1fM", v569 / 1000000)
+						elseif v569 >= 1000 then
+							local v571 = string.format
+							local v572 = v569 / 1000
+							v570 = v571("$%dK", (math.floor(v572)))
+						else
+							v570 = "$" .. v569
+						end
+						v547.Text = v546 .. v548 .. v550 .. v553 .. v555 .. v558 .. v560 .. v563 .. v565 .. v568 .. v570
+						v_u_12 = nil
+					end)
+				else
+					local v573 = 0.15 + math.random() * 0.7
+					local v574 = 0.1 + math.random() * 0.8
+					v_u_392 = v573
+					v_u_393 = v574
+					local v575 = {}
+					for _, v576 in ipairs(v_u_376) do
+						table.insert(v575, v576)
+					end
+					for _, v577 in ipairs(v_u_377) do
+						table.insert(v575, v577)
+					end
+					for _ = 1, 3 do
+						local v578 = v575[math.random(1, #v575)]
+						local v579 = v573 + (math.random() - 0.5) * 0.12
+						local v580 = v574 + (math.random() - 0.5) * 0.12
+						v578.targetX = v579
+						v578.targetY = v580
+					end
+					v_u_435(v480.text, v_u_24, false)
+				end
+			end
+		end
+	end)
+end
+local function v_u_784(p_u_582)
+	-- upvalues: (copy) v_u_60, (copy) v_u_50, (copy) v_u_14, (copy) v_u_16, (copy) v_u_15, (copy) v_u_25, (copy) v_u_18, (copy) v_u_20, (copy) v_u_22, (copy) v_u_6, (copy) v_u_26, (copy) v_u_24, (copy) v_u_27, (copy) v_u_23, (copy) v_u_19, (copy) v_u_3, (copy) v_u_51, (copy) v_u_49, (ref) v_u_52, (copy) v_u_21, (copy) v_u_28, (copy) v_u_10, (ref) v_u_12
+	local v583 = 30 / v_u_60()
+	local v_u_584 = 90 / (math.max(5, v583) / 0.1)
+	local v_u_585 = Color3.fromRGB(12, 30, 22)
+	local v_u_586 = Color3.fromRGB(35, 8, 18)
+	local v_u_587 = Color3.fromRGB(40, 5, 10)
+	local v_u_588 = Color3.fromRGB(18, 6, 32)
+	local v589 = v_u_50
+	local v590 = UDim2.new(1, 0, 1, 0)
+	local v591 = UDim2.new(0, 0, 0, 0)
+	local v592 = v_u_14
+	local v_u_593 = Instance.new("Frame")
+	v_u_593.Size = v590
+	v_u_593.Position = v591
+	v_u_593.BackgroundColor3 = v592 or v_u_16
+	v_u_593.BackgroundTransparency = 0
+	v_u_593.BorderSizePixel = 0
+	v_u_593.Parent = v589
+	v_u_593.ZIndex = 2
+	local v594 = Color3.fromRGB(12, 2, 26)
+	local v595 = Color3.fromRGB(55, 12, 75)
+	local v596 = Instance.new("UIGradient")
+	v596.Color = ColorSequence.new(v594, v595)
+	v596.Rotation = 125
+	v596.Parent = v_u_593
+	local v597 = UDim2.new(1, 0, 0, 56)
+	local v598 = UDim2.new(0, 0, 0, 0)
+	local v599 = v_u_15
+	local v600 = Instance.new("Frame")
+	v600.Size = v597
+	v600.Position = v598
+	v600.BackgroundColor3 = v599 or v_u_16
+	v600.BackgroundTransparency = 0.28
+	v600.BorderSizePixel = 0
+	v600.Parent = v_u_593
+	v600.ZIndex = 3
+	local v601 = v_u_25
+	local v602 = Instance.new("UIStroke")
+	v602.Color = v601 or v_u_25
+	v602.Thickness = 1
+	v602.Transparency = 0.45
+	v602.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	v602.Parent = v600
+	local v603 = UDim2.new(1, 0, 0, 2)
+	local v604 = UDim2.new(0, 0, 1, -2)
+	local v605 = v_u_18
+	local v606 = Instance.new("Frame")
+	v606.Size = v603
+	v606.Position = v604
+	v606.BackgroundColor3 = v605 or v_u_16
+	v606.BackgroundTransparency = 0.45
+	v606.BorderSizePixel = 0
+	v606.Parent = v600
+	v606.ZIndex = 4
+	local v607 = UDim2.new(1, 0, 1, 0)
+	local v608 = UDim2.new(0, 0, 0, 0)
+	local v609 = v_u_20
+	local v610 = Instance.new("TextLabel")
+	v610.Size = v607
+	v610.Position = v608
+	v610.BackgroundTransparency = 1
+	v610.Text = "MATCH HIGHLIGHTS"
+	v610.TextSize = 14
+	v610.TextColor3 = v609 or v_u_22
+	v610.Font = Enum.Font.GothamBold or Enum.Font.Gotham
+	v610.TextXAlignment = Enum.TextXAlignment.Center
+	v610.TextWrapped = true
+	v610.Parent = v600
+	v610.ZIndex = 4
+	local v611 = UDim2.new(0.92, 0, 0, 72)
+	local v612 = UDim2.new(0.04, 0, 0, 64)
+	local v613 = v_u_16
+	local v614 = Instance.new("Frame")
+	v614.Size = v611
+	v614.Position = v612
+	v614.BackgroundColor3 = v613 or v_u_16
+	v614.BackgroundTransparency = 0.22
+	v614.BorderSizePixel = 0
+	v614.Parent = v_u_593
+	v614.ZIndex = 3
+	local v615 = UDim.new(0, 10)
+	local v616 = Instance.new("UICorner")
+	v616.CornerRadius = v615 or UDim.new(0, 8)
+	v616.Parent = v614
+	local v617 = v_u_18
+	local v618 = Instance.new("UIStroke")
+	v618.Color = v617 or v_u_25
+	v618.Thickness = 1
+	v618.Transparency = 0.45
+	v618.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	v618.Parent = v614
+	local v619 = p_u_582.teamName or v_u_6.Name
+	local v620 = UDim2.new(0.38, 0, 1, 0)
+	local v621 = UDim2.new(0, 8, 0, 0)
+	local v622 = v_u_22
+	local v623 = Enum.TextXAlignment.Left
+	local v624 = Instance.new("TextLabel")
+	v624.Size = v620
+	v624.Position = v621
+	v624.BackgroundTransparency = 1
+	v624.Text = v619
+	v624.TextSize = 13
+	v624.TextColor3 = v622 or v_u_22
+	v624.Font = Enum.Font.GothamBold or Enum.Font.Gotham
+	v624.TextXAlignment = v623 or Enum.TextXAlignment.Center
+	v624.TextWrapped = true
+	v624.Parent = v614
+	v624.TextTruncate = Enum.TextTruncate.AtEnd
+	v624.ZIndex = 4
+	local v625 = UDim2.new(0, 110, 0, 48)
+	local v626 = UDim2.new(0.5, -55, 0.5, -24)
+	local v627 = v_u_14
+	local v628 = Instance.new("Frame")
+	v628.Size = v625
+	v628.Position = v626
+	v628.BackgroundColor3 = v627 or v_u_16
+	v628.BackgroundTransparency = 0
+	v628.BorderSizePixel = 0
+	v628.Parent = v614
+	v628.ZIndex = 4
+	local v629 = UDim.new(0, 8)
+	local v630 = Instance.new("UICorner")
+	v630.CornerRadius = v629 or UDim.new(0, 8)
+	v630.Parent = v628
+	local v631 = Color3.fromRGB(12, 2, 26)
+	local v632 = Color3.fromRGB(30, 8, 45)
+	local v633 = Instance.new("UIGradient")
+	v633.Color = ColorSequence.new(v631, v632)
+	v633.Rotation = 90
+	v633.Parent = v628
+	local v634 = UDim2.new(0.38, 0, 1, 0)
+	local v635 = UDim2.new(0, 0, 0, 0)
+	local v636 = v_u_26
+	local v_u_637 = Instance.new("TextLabel")
+	v_u_637.Size = v634
+	v_u_637.Position = v635
+	v_u_637.BackgroundTransparency = 1
+	v_u_637.Text = "0"
+	v_u_637.TextSize = 30
+	v_u_637.TextColor3 = v636 or v_u_22
+	v_u_637.Font = Enum.Font.GothamBold or Enum.Font.Gotham
+	v_u_637.TextXAlignment = Enum.TextXAlignment.Center
+	v_u_637.TextWrapped = true
+	v_u_637.Parent = v628
+	v_u_637.ZIndex = 5
+	local v638 = UDim2.new(0.24, 0, 1, 0)
+	local v639 = UDim2.new(0.38, 0, 0, 0)
+	local v640 = v_u_24
+	local v641 = Instance.new("TextLabel")
+	v641.Size = v638
+	v641.Position = v639
+	v641.BackgroundTransparency = 1
+	v641.Text = "\226\128\147"
+	v641.TextSize = 22
+	v641.TextColor3 = v640 or v_u_22
+	v641.Font = Enum.Font.GothamBold or Enum.Font.Gotham
+	v641.TextXAlignment = Enum.TextXAlignment.Center
+	v641.TextWrapped = true
+	v641.Parent = v628
+	v641.ZIndex = 5
+	local v642 = UDim2.new(0.38, 0, 1, 0)
+	local v643 = UDim2.new(0.62, 0, 0, 0)
+	local v644 = v_u_27
+	local v_u_645 = Instance.new("TextLabel")
+	v_u_645.Size = v642
+	v_u_645.Position = v643
+	v_u_645.BackgroundTransparency = 1
+	v_u_645.Text = "0"
+	v_u_645.TextSize = 30
+	v_u_645.TextColor3 = v644 or v_u_22
+	v_u_645.Font = Enum.Font.GothamBold or Enum.Font.Gotham
+	v_u_645.TextXAlignment = Enum.TextXAlignment.Center
+	v_u_645.TextWrapped = true
+	v_u_645.Parent = v628
+	v_u_645.ZIndex = 5
+	local v646 = UDim2.new(0, 50, 0, 16)
+	local v647 = UDim2.new(0.5, -25, 1, -18)
+	local v648 = v_u_24
+	local v_u_649 = Instance.new("TextLabel")
+	v_u_649.Size = v646
+	v_u_649.Position = v647
+	v_u_649.BackgroundTransparency = 1
+	v_u_649.Text = "0\'"
+	v_u_649.TextSize = 11
+	v_u_649.TextColor3 = v648 or v_u_22
+	v_u_649.Font = Enum.Font.Gotham
+	v_u_649.TextXAlignment = Enum.TextXAlignment.Center
+	v_u_649.TextWrapped = true
+	v_u_649.Parent = v614
+	v_u_649.ZIndex = 4
+	local v650 = p_u_582.aiTeam or "AI Team"
+	local v651 = UDim2.new(0.38, 0, 1, 0)
+	local v652 = UDim2.new(0.62, -8, 0, 0)
+	local v653 = v_u_24
+	local v654 = Enum.TextXAlignment.Right
+	local v655 = Instance.new("TextLabel")
+	v655.Size = v651
+	v655.Position = v652
+	v655.BackgroundTransparency = 1
+	v655.Text = v650
+	v655.TextSize = 13
+	v655.TextColor3 = v653 or v_u_22
+	v655.Font = Enum.Font.GothamBold or Enum.Font.Gotham
+	v655.TextXAlignment = v654 or Enum.TextXAlignment.Center
+	v655.TextWrapped = true
+	v655.Parent = v614
+	v655.TextTruncate = Enum.TextTruncate.AtEnd
+	v655.ZIndex = 4
+	local v_u_656 = Instance.new("ScrollingFrame")
+	v_u_656.Size = UDim2.new(0.92, 0, 1, -280)
+	v_u_656.Position = UDim2.new(0.04, 0, 0, 148)
+	v_u_656.BackgroundTransparency = 1
+	v_u_656.BorderSizePixel = 0
+	v_u_656.ScrollBarThickness = 3
+	v_u_656.ScrollBarImageColor3 = v_u_18
+	v_u_656.CanvasSize = UDim2.new(0, 0, 0, 0)
+	v_u_656.AutomaticCanvasSize = Enum.AutomaticSize.Y
+	v_u_656.ZIndex = 3
+	v_u_656.Parent = v_u_593
+	local v657 = Instance.new("UIListLayout", v_u_656)
+	v657.SortOrder = Enum.SortOrder.LayoutOrder
+	v657.Padding = UDim.new(0, 4)
+	Instance.new("UIPadding", v_u_656).PaddingTop = UDim.new(0, 4)
+	local v658 = UDim2.new(0.92, 0, 0, 136)
+	local v659 = UDim2.new(0.04, 0, 1, -148)
+	local v660 = v_u_16
+	local v_u_661 = Instance.new("Frame")
+	v_u_661.Size = v658
+	v_u_661.Position = v659
+	v_u_661.BackgroundColor3 = v660 or v_u_16
+	v_u_661.BackgroundTransparency = 0.15
+	v_u_661.BorderSizePixel = 0
+	v_u_661.Parent = v_u_593
+	v_u_661.Visible = false
+	v_u_661.ZIndex = 5
+	local v662 = UDim.new(0, 10)
+	local v663 = Instance.new("UICorner")
+	v663.CornerRadius = v662 or UDim.new(0, 8)
+	v663.Parent = v_u_661
+	local v664 = v_u_18
+	local v_u_665 = Instance.new("UIStroke")
+	v_u_665.Color = v664 or v_u_25
+	v_u_665.Thickness = 1
+	v_u_665.Transparency = 0.45
+	v_u_665.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	v_u_665.Parent = v_u_661
+	local v666 = UDim2.new(1, 0, 0, 3)
+	local v667 = UDim2.new(0, 0, 0, 0)
+	local v668 = v_u_18
+	local v_u_669 = Instance.new("Frame")
+	v_u_669.Size = v666
+	v_u_669.Position = v667
+	v_u_669.BackgroundColor3 = v668 or v_u_16
+	v_u_669.BackgroundTransparency = 0
+	v_u_669.BorderSizePixel = 0
+	v_u_669.Parent = v_u_661
+	v_u_669.ZIndex = 6
+	local v670 = UDim.new(0, 10)
+	local v671 = Instance.new("UICorner")
+	v671.CornerRadius = v670 or UDim.new(0, 8)
+	v671.Parent = v_u_669
+	local v672 = UDim2.new(0.55, 0, 0, 38)
+	local v673 = UDim2.new(0, 14, 0, 10)
+	local v674 = v_u_22
+	local v675 = Enum.TextXAlignment.Left
+	local v676 = Instance.new("TextLabel")
+	v676.Size = v672
+	v676.Position = v673
+	v676.BackgroundTransparency = 1
+	v676.Text = ""
+	v676.TextSize = 22
+	v676.TextColor3 = v674 or v_u_22
+	v676.Font = Enum.Font.GothamBold or Enum.Font.Gotham
+	v676.TextXAlignment = v675 or Enum.TextXAlignment.Center
+	v676.TextWrapped = true
+	v676.Parent = v_u_661
+	local v_u_677 = v676
+	v_u_677.ZIndex = 6
+	local v678 = UDim2.new(0.55, 0, 0, 72)
+	local v679 = UDim2.new(0, 14, 0, 46)
+	local v680 = v_u_23
+	local v681 = Enum.TextXAlignment.Left
+	local v682 = Instance.new("TextLabel")
+	v682.Size = v678
+	v682.Position = v679
+	v682.BackgroundTransparency = 1
+	v682.Text = ""
+	v682.TextSize = 12
+	v682.TextColor3 = v680 or v_u_22
+	v682.Font = Enum.Font.Gotham
+	v682.TextXAlignment = v681 or Enum.TextXAlignment.Center
+	v682.TextWrapped = true
+	v682.Parent = v_u_661
+	local v_u_683 = v682
+	v_u_683.ZIndex = 6
+	local v_u_684 = Instance.new("TextButton")
+	v_u_684.Size = UDim2.new(0, 148, 0, 44)
+	v_u_684.AnchorPoint = Vector2.new(1, 0.5)
+	v_u_684.Position = UDim2.new(1, -14, 0.5, 0)
+	v_u_684.BackgroundColor3 = v_u_18
+	v_u_684.BorderSizePixel = 0
+	v_u_684.Text = "CONTINUE  \226\134\146"
+	v_u_684.TextColor3 = v_u_22
+	v_u_684.Font = Enum.Font.GothamBold
+	v_u_684.TextSize = 14
+	v_u_684.AutoButtonColor = false
+	v_u_684.ZIndex = 6
+	v_u_684.Parent = v_u_661
+	local v685 = UDim.new(0, 8)
+	local v686 = Instance.new("UICorner")
+	v686.CornerRadius = v685 or UDim.new(0, 8)
+	v686.Parent = v_u_684
+	local v687 = v_u_20
+	local v688 = v_u_19
+	local v689 = Instance.new("UIGradient")
+	v689.Color = ColorSequence.new(v687, v688)
+	v689.Rotation = 135
+	v689.Parent = v_u_684
+	v_u_684.MouseEnter:Connect(function()
+		-- upvalues: (ref) v_u_3, (copy) v_u_684, (ref) v_u_20
+		local v690 = {
+			["BackgroundColor3"] = v_u_20
+		}
+		v_u_3:Create(v_u_684, TweenInfo.new(0.15), v690):Play()
+	end)
+	v_u_684.MouseLeave:Connect(function()
+		-- upvalues: (ref) v_u_3, (copy) v_u_684, (ref) v_u_18
+		local v691 = {
+			["BackgroundColor3"] = v_u_18
+		}
+		v_u_3:Create(v_u_684, TweenInfo.new(0.15), v691):Play()
+	end)
+	v_u_684.MouseButton1Click:Connect(function()
+		-- upvalues: (copy) v_u_593, (ref) v_u_50, (ref) v_u_51, (ref) v_u_49, (copy) p_u_582
+		v_u_593:Destroy()
+		v_u_50.Enabled = false
+		v_u_51.Enabled = true
+		v_u_49(p_u_582.newInjuries)
+	end)
+	task.spawn(function()
+		-- upvalues: (copy) v_u_661, (ref) v_u_52, (copy) v_u_593, (ref) v_u_50, (ref) v_u_51, (ref) v_u_49, (copy) p_u_582
+		while not v_u_661.Visible do
+			task.wait(0.1)
+		end
+		if v_u_52 then
+			task.wait(1)
+			if v_u_593 and v_u_593.Parent then
+				v_u_593:Destroy()
+				v_u_50.Enabled = false
+				v_u_51.Enabled = true
+				v_u_49(p_u_582.newInjuries)
+			end
+		end
+	end)
+	local function v_u_716(p692, p693, p694, p695)
+		-- upvalues: (copy) v_u_587, (copy) v_u_585, (copy) v_u_586, (copy) v_u_588, (copy) v_u_656, (ref) v_u_16, (ref) v_u_18, (ref) v_u_25, (ref) v_u_27, (ref) v_u_26, (ref) v_u_22
+		local v696 = p695 and v_u_587 or p693 and (p694 == "home" and v_u_585 or v_u_586) or v_u_588
+		local v697 = v_u_656
+		local v698 = UDim2.new(1, 0, 0, 46)
+		local v699 = UDim2.new(0, 0, 0, 0)
+		local v700 = Instance.new("Frame")
+		v700.Size = v698
+		v700.Position = v699
+		v700.BackgroundColor3 = v696 or v_u_16
+		v700.BackgroundTransparency = 0.22
+		v700.BorderSizePixel = 0
+		v700.Parent = v697
+		v700.ZIndex = 4
+		local v701 = UDim.new(0, 7)
+		local v702 = Instance.new("UICorner")
+		v702.CornerRadius = v701 or UDim.new(0, 8)
+		v702.Parent = v700
+		local v703 = p693 and v_u_18 or v_u_25
+		local v704 = Instance.new("UIStroke")
+		v704.Color = v703 or v_u_25
+		v704.Thickness = 1
+		v704.Transparency = 0.45
+		v704.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+		v704.Parent = v700
+		local v705 = p695 and v_u_27 or p693 and (p694 == "home" and v_u_18 or v_u_27) or v_u_25
+		local v706 = UDim2.new(0, 3, 1, -8)
+		local v707 = UDim2.new(0, 0.5, 0, 0)
+		local v708 = Instance.new("Frame")
+		v708.Size = v706
+		v708.Position = v707
+		v708.BackgroundColor3 = v705 or v_u_16
+		v708.BackgroundTransparency = 0
+		v708.BorderSizePixel = 0
+		v708.Parent = v700
+		v708.AnchorPoint = Vector2.new(0, 0.5)
+		v708.ZIndex = 5
+		local v709 = UDim.new(0, 2)
+		local v710 = Instance.new("UICorner")
+		v710.CornerRadius = v709 or UDim.new(0, 8)
+		v710.Parent = v708
+		local v711 = p695 and v_u_27 or p693 and (p694 == "home" and v_u_26 or v_u_27) or v_u_22
+		local v712 = UDim2.new(1, -20, 1, 0)
+		local v713 = UDim2.new(0, 12, 0, 0)
+		local v714 = Enum.TextXAlignment.Left
+		local v715 = Instance.new("TextLabel")
+		v715.Size = v712
+		v715.Position = v713
+		v715.BackgroundTransparency = 1
+		v715.Text = p692
+		v715.TextSize = 13
+		v715.TextColor3 = v711 or v_u_22
+		v715.Font = (p693 or p695) and Enum.Font.GothamBold or Enum.Font.Gotham
+		v715.TextXAlignment = v714 or Enum.TextXAlignment.Center
+		v715.TextWrapped = true
+		v715.Parent = v700
+		v715.ZIndex = 5
+		task.wait()
+		v_u_656.CanvasPosition = Vector2.new(0, v_u_656.AbsoluteCanvasSize.Y)
+	end
+	local v_u_717 = 0
+	local v_u_718 = 0
+	local v_u_719 = 0
+	local v_u_720 = 1
+	local v_u_721 = p_u_582.highlights
+	local v_u_722 = false
+	task.spawn(function()
+		-- upvalues: (ref) v_u_719, (ref) v_u_722, (copy) v_u_584, (copy) v_u_649, (ref) v_u_720, (copy) v_u_721, (ref) v_u_717, (copy) v_u_637, (ref) v_u_3, (ref) v_u_21, (ref) v_u_26, (ref) v_u_718, (copy) v_u_645, (copy) v_u_716, (copy) p_u_582, (copy) v_u_669, (ref) v_u_18, (copy) v_u_665, (ref) v_u_27, (ref) v_u_28, (copy) v_u_677, (copy) v_u_683, (copy) v_u_661, (ref) v_u_10, (ref) v_u_12
+		while true do
+			if v_u_719 >= 90 or v_u_722 then
+				return
+			end
+			task.wait(0.1)
+			local v723 = v_u_719 + v_u_584
+			v_u_719 = math.min(90, v723)
+			local v724 = v_u_719
+			v_u_649.Text = math.floor(v724) .. "\'"
+			while v_u_720 <= #v_u_721 do
+				local v725 = v_u_719
+				if v_u_721[v_u_720].minute > math.floor(v725) then
+					break
+				end
+				local v726 = v_u_721[v_u_720]
+				v_u_720 = v_u_720 + 1
+				if v726.isGoal then
+					if v726.team == "home" then
+						v_u_717 = v_u_717 + 1
+						local v727 = v_u_717
+						v_u_637.Text = tostring(v727)
+						local v728 = {
+							["TextColor3"] = v_u_21
+						}
+						v_u_3:Create(v_u_637, TweenInfo.new(0.15), v728):Play()
+						task.delay(0.4, function()
+							-- upvalues: (ref) v_u_3, (ref) v_u_637, (ref) v_u_26
+							local v729 = {
+								["TextColor3"] = v_u_26
+							}
+							v_u_3:Create(v_u_637, TweenInfo.new(0.25), v729):Play()
+						end)
+					else
+						v_u_718 = v_u_718 + 1
+						local v730 = v_u_718
+						v_u_645.Text = tostring(v730)
+					end
+				end
+				v_u_716(v726.text, v726.isGoal, v726.team, v726.isRedCard)
+				if v726.isFinal then
+					v_u_722 = true
+					task.wait(0.5)
+					local v731, v732
+					if p_u_582.result == "Win" then
+						v731 = v_u_26
+						v_u_669.BackgroundColor3 = v_u_18
+						v_u_665.Color = v_u_26
+						v732 = "VICTORY!"
+					elseif p_u_582.result == "Loss" then
+						v731 = v_u_27
+						v_u_669.BackgroundColor3 = v_u_27
+						v_u_665.Color = v_u_27
+						v732 = "DEFEAT"
+					else
+						v731 = v_u_28
+						v_u_669.BackgroundColor3 = v_u_28
+						v_u_665.Color = v_u_28
+						v732 = "DRAW"
+					end
+					v_u_677.Text = v732
+					v_u_677.TextColor3 = v731
+					local v733 = p_u_582.earnings
+					local v734 = v_u_683
+					local v735 = "\240\159\146\176 "
+					local v736 = v733.Total
+					local v737
+					if v736 >= 1000000 then
+						v737 = string.format("$%.1fM", v736 / 1000000)
+					elseif v736 >= 1000 then
+						local v738 = string.format
+						local v739 = v736 / 1000
+						v737 = v738("$%dK", (math.floor(v739)))
+					else
+						v737 = "$" .. v736
+					end
+					local v740 = "\n\240\159\142\175 "
+					local v741 = v733.Sponsor
+					local v742
+					if v741 >= 1000000 then
+						v742 = string.format("$%.1fM", v741 / 1000000)
+					elseif v741 >= 1000 then
+						local v743 = string.format
+						local v744 = v741 / 1000
+						v742 = v743("$%dK", (math.floor(v744)))
+					else
+						v742 = "$" .. v741
+					end
+					local v745 = "  \194\183 \240\159\142\159 "
+					local v746 = v733.Ticketing
+					local v747
+					if v746 >= 1000000 then
+						v747 = string.format("$%.1fM", v746 / 1000000)
+					elseif v746 >= 1000 then
+						local v748 = string.format
+						local v749 = v746 / 1000
+						v747 = v748("$%dK", (math.floor(v749)))
+					else
+						v747 = "$" .. v746
+					end
+					v734.Text = v735 .. v737 .. v740 .. v742 .. v745 .. v747
+					v_u_661.Visible = true
+					v_u_661.BackgroundTransparency = 1
+					v_u_3:Create(v_u_661, TweenInfo.new(0.3), {
+						["BackgroundTransparency"] = 0.15
+					}):Play()
+					v_u_10:FireServer(p_u_582.result, p_u_582.earnings.Total, p_u_582.updatedLeague, nil, p_u_582.newInjuries, {
+						["aiTeam"] = p_u_582.aiTeam,
+						["hGoals"] = v_u_717,
+						["aGoals"] = v_u_718,
+						["isHome"] = not p_u_582.isAway
+					})
+					task.spawn(function()
+						-- upvalues: (ref) v_u_12, (ref) p_u_582, (ref) v_u_683
+						local v750 = 0
+						while not v_u_12 and v750 < 30 do
+							task.wait(0.1)
+							v750 = v750 + 1
+						end
+						local v751 = v_u_12 or {}
+						local v752 = p_u_582.earnings
+						local v753 = v_u_683
+						local v754 = "\240\159\146\176 "
+						local v755 = v752.Total
+						local v756
+						if v755 >= 1000000 then
+							v756 = string.format("$%.1fM", v755 / 1000000)
+						elseif v755 >= 1000 then
+							local v757 = string.format
+							local v758 = v755 / 1000
+							v756 = v757("$%dK", (math.floor(v758)))
+						else
+							v756 = "$" .. v755
+						end
+						local v759 = "\n\240\159\142\175 "
+						local v760 = v752.Sponsor
+						local v761
+						if v760 >= 1000000 then
+							v761 = string.format("$%.1fM", v760 / 1000000)
+						elseif v760 >= 1000 then
+							local v762 = string.format
+							local v763 = v760 / 1000
+							v761 = v762("$%dK", (math.floor(v763)))
+						else
+							v761 = "$" .. v760
+						end
+						local v764 = "  \194\183 \240\159\142\159 "
+						local v765 = v752.Ticketing
+						local v766
+						if v765 >= 1000000 then
+							v766 = string.format("$%.1fM", v765 / 1000000)
+						elseif v765 >= 1000 then
+							local v767 = string.format
+							local v768 = v765 / 1000
+							v766 = v767("$%dK", (math.floor(v768)))
+						else
+							v766 = "$" .. v765
+						end
+						local v769 = "\n\240\159\145\149 -"
+						local v770 = v751.salaries or 0
+						local v771
+						if v770 >= 1000000 then
+							v771 = string.format("$%.1fM", v770 / 1000000)
+						elseif v770 >= 1000 then
+							local v772 = string.format
+							local v773 = v770 / 1000
+							v771 = v772("$%dK", (math.floor(v773)))
+						else
+							v771 = "$" .. v770
+						end
+						local v774 = "  \240\159\167\145\226\128\141\240\159\146\188 -"
+						local v775 = v751.coachSalary or 0
+						local v776
+						if v775 >= 1000000 then
+							v776 = string.format("$%.1fM", v775 / 1000000)
+						elseif v775 >= 1000 then
+							local v777 = string.format
+							local v778 = v775 / 1000
+							v776 = v777("$%dK", (math.floor(v778)))
+						else
+							v776 = "$" .. v775
+						end
+						local v779 = "\n\226\156\133 "
+						local v780 = v751.net or v752.Total
+						local v781
+						if v780 >= 1000000 then
+							v781 = string.format("$%.1fM", v780 / 1000000)
+						elseif v780 >= 1000 then
+							local v782 = string.format
+							local v783 = v780 / 1000
+							v781 = v782("$%dK", (math.floor(v783)))
+						else
+							v781 = "$" .. v780
+						end
+						v753.Text = v754 .. v756 .. v759 .. v761 .. v764 .. v766 .. v769 .. v771 .. v774 .. v776 .. v779 .. v781
+						v_u_12 = nil
+					end)
+					break
+				end
+			end
+		end
+	end)
+end
+v9.OnClientEvent:Connect(function(p_u_785)
+	-- upvalues: (copy) v_u_50, (copy) v_u_51, (ref) v_u_13, (copy) v_u_40, (ref) v_u_52, (copy) v_u_784, (copy) v_u_193, (copy) v_u_2, (copy) v_u_581
+	if p_u_785.error then
+		warn("[MatchClient]", p_u_785.error)
+		v_u_50.Enabled = false
+		v_u_51.Enabled = true
+		v_u_13:Fire(p_u_785.error)
+		v_u_40(p_u_785.error)
+		return
+	else
+		v_u_51.Enabled = false
+		v_u_50.Enabled = true
+		if v_u_52 then
+			v_u_784(p_u_785)
+		else
+			v_u_193(function(p786)
+				-- upvalues: (ref) v_u_2, (copy) p_u_785, (ref) v_u_581, (ref) v_u_784
+				if p786 == "2D" then
+					local v_u_787 = v_u_2:WaitForChild("DataEvents"):WaitForChild("GetData")
+					task.spawn(function()
+						-- upvalues: (copy) v_u_787, (ref) p_u_785, (ref) v_u_581
+						local v788 = v_u_787:InvokeServer()
+						p_u_785.lineup = v788 and (v788.Lineup or {}) or {}
+						p_u_785.logo = v788 and v788.Logo or p_u_785.logo
+						v_u_581(p_u_785)
+					end)
+				else
+					v_u_784(p_u_785)
+				end
+			end)
+		end
+	end
+end)
